@@ -1,0 +1,49 @@
+// 项目主色调
+$--color-orange:#fc9 !default;
+$--color-gold:#ffc !default;
+$--color-azure:#cff !default;
+$--color-green-deep:#9cc !default;
+$--color-green-light:#cfc !default;
+$--color-purple:#ccf !default;
+$--color-blue-light:#9cf !default;
+$--color-blue:#09c !default;
+$--color-blue-deep:#369 !default;
+$--color-blue-verydeep:#036 !default;
+$--color-green:#9c3 !default;
+
+$--color-primary :#409eff !default;
+$--color-success :#85ce61 !default;
+$--color-info: #909399 !default;
+$--color-danger :#f78989 !default;
+$--color-warnning :#e6a23c !default;
+
+$--color-level0: #000 !default;
+$--color-level1: #111 !default;
+$--color-level2: #222 !default;
+$--color-level3: #333 !default;
+$--color-level4: #444 !default;
+$--color-level5: #555 !default;
+$--color-level6: #666 !default;
+$--color-level7: #777 !default;
+$--color-level8: #888 !default;
+$--color-level9: #999 !default;
+$--color-level10: #aaa !default;
+$--color-level11: #bbb !default;
+$--color-level12: #ccc !default;
+$--color-level13: #ddd !default;
+$--color-level14: #eee !default;
+$--color-level15: #fff !default;
+
+$--title-color:#181818 !default;
+
+$--text-color: #606266 !default;
+$--text-color-hover: #409eff;
+$--text-color-disabled: mix($--text-color, #fff, 50%);
+
+$--border-color-base: #dcdfe6 !default;
+$--border-color-hover: mix($--color-primary, #fff, 50%);
+$--border-color-active: mix($--color-primary, #fff, 90%);
+
+$--background-color:mix(#fff, #000, 98%);
+$--background-color-hover:mix($--color-primary, #fff, 10%);
+$--background-color-disabled:mix(#fff, #000, 96%);

@@ -1,0 +1,676 @@
+body,
+ul,
+ol,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+form,
+input,
+button {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+button,
+input,
+textarea {
+  color: #333;
+  font: 14px/1.4 'Helvetica Neue', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft Yahei', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+
+input {
+  outline: 0 none;
+}
+
+img,
+input {
+  border: none;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: top;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+i {
+  font-style: normal;
+}
+
+button,
+input[type="button"],
+input[type='submit'] {
+  cursor: pointer;
+}
+
+a {
+  color: #428bca;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover {
+  color: #2a6496;
+}
+
+a:focus,
+button:focus,
+input:focus {
+  outline: 0;
+}
+
+//定义各浏览器输入框placeholder的样式（已基本调整一致）
+input:input-placeholder,
+textarea:input-placeholder,
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: #e6e6e6;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder,
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: #999;
+}
+
+//清除谷歌自输入框样式
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+}
+
+// 清除ie输入框叉叉与眼睛
+::-ms-clear,
+::-ms-reveal {
+  display: none;
+}
+
+// Correct block display not defined for any HTML5 element in IE 8/9.
+// Correct block display not defined for details or summary in IE 10/11 and Firefox.
+// Correct block display not defined for main in IE 11.
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+
+// 1. Correct inline-block display not defined in IE 9-.
+audio,
+canvas,
+progress,
+video {
+  display: inline-block; // 1
+}
+
+// position
+.rel {
+  position: relative;
+}
+
+.abs {
+  position: absolute;
+}
+
+// float
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+// display
+.dpn {
+  display: none;
+}
+
+.dpi {
+  display: inline;
+}
+
+.dpb {
+  display: block;
+}
+
+.dpib {
+  display: inline-block;
+}
+
+.dptc {
+  display: table-cell;
+}
+
+.vam {
+  vertical-align: middle;
+}
+
+// widthpercent
+.wp20 {
+  width: 20%;
+}
+
+.wp30 {
+  width: 30%;
+}
+
+.wp40 {
+  width: 40%;
+}
+
+.wp50 {
+  width: 50%;
+}
+
+.wp60 {
+  width: 60%;
+}
+
+.wp70 {
+  width: 70%;
+}
+
+.wp80 {
+  width: 80%;
+}
+
+.wp100 {
+  width: 100%;
+}
+
+// padding
+.p0 {
+  padding: 0;
+}
+
+.p5 {
+  padding: 5px;
+}
+
+.pt5 {
+  padding-top: 5px;
+}
+
+.pr5 {
+  padding-right: 5px;
+}
+
+.pb5 {
+  padding-bottom: 5px;
+}
+
+.pl5 {
+  padding-left: 5px;
+}
+
+.p10 {
+  padding: 10px;
+}
+
+.pl10 {
+  padding-left: 10px;
+}
+
+.pt10 {
+  padding-top: 10px;
+}
+
+.pr10 {
+  padding-right: 10px;
+}
+
+.pb10 {
+  padding-bottom: 10px;
+}
+
+.p15 {
+  padding: 15px;
+}
+
+.pl15 {
+  padding-left: 15px;
+}
+
+.pt15 {
+  padding-top: 15px;
+}
+
+.pr15 {
+  padding-right: 15px;
+}
+
+.pb15 {
+  padding-bottom: 15px;
+}
+
+.p20 {
+  padding: 20px;
+}
+
+.pl20 {
+  padding-left: 20px;
+}
+
+.pt20 {
+  padding-top: 20px;
+}
+
+.pr20 {
+  padding-right: 20px;
+}
+
+.pb20 {
+  padding-bottom: 20px;
+}
+
+.p30 {
+  padding: 30px;
+}
+
+.pl30 {
+  padding-left: 30px;
+}
+
+.pt30 {
+  padding-top: 30px;
+}
+
+.pr30 {
+  padding-right: 30px;
+}
+
+.pb30 {
+  padding-bottom: 30px;
+}
+
+// margin
+.m0 {
+  margin: 0;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.ml5 {
+  margin-left: 5px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.ml10 {
+  margin-left: 10px;
+}
+
+.mt15 {
+  margin-top: 15px;
+}
+
+.mr15 {
+  margin-right: 15px;
+}
+
+.mb15 {
+  margin-bottom: 15px;
+}
+
+.ml15 {
+  margin-left: 15px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mr20 {
+  margin-right: 20px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.ml20 {
+  margin-left: 20px;
+}
+
+.mt30 {
+  margin-top: 30px;
+}
+
+.mr30 {
+  margin-right: 30px;
+}
+
+.mb30 {
+  margin-bottom: 30px;
+}
+
+.ml30 {
+  margin-left: 30px;
+}
+
+.ml100 {
+  margin-left: 100px;
+}
+
+// line-height
+.lh1 {
+  line-height: 1;
+}
+
+.lh14 {
+  line-height: 14px;
+}
+
+.lh16 {
+  line-height: 16px;
+}
+
+.lh18 {
+  line-height: 18px;
+}
+
+.lh20 {
+  line-height: 20px;
+}
+
+.lh22 {
+  line-height: 22px;
+}
+
+.lh24 {
+  line-height: 24px;
+}
+
+.lh26 {
+  line-height: 26px;
+}
+
+.lh30 {
+  line-height: 30px;
+}
+
+.lh36 {
+  line-height: 36px;
+}
+
+.lh40 {
+  line-height: 40px;
+}
+
+.lh46 {
+  line-height: 46px;
+}
+
+.lh50 {
+  line-height: 50px;
+}
+
+// font-size
+.fs10 {
+  font-size: 10px;
+}
+
+.fs12 {
+  font-size: 12px;
+}
+
+.fs14 {
+  font-size: 14px;
+}
+
+.fs16 {
+  font-size: 16px;
+}
+
+.fs18 {
+  font-size: 18px;
+}
+
+.fs20 {
+  font-size: 20px;
+}
+
+.fs24 {
+  font-size: 24px;
+}
+
+.fs26 {
+  font-size: 26px;
+}
+
+// font-style
+.n {
+  font-weight: normal;
+  font-style: normal;
+}
+
+.b {
+  font-weight: bold;
+}
+
+// text-align
+.tac {
+  text-align: center;
+}
+
+.tar {
+  text-align: right;
+}
+
+.tal {
+  text-align: left;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+.clearfix::after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+//居中
+.m0a {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+//换行
+.wbb {
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+// 单行文字溢出虚点显示
+.ell {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+// 字间隔
+.ls3 {
+  letter-spacing: 3px;
+}
+
+// 黑色透明背景
+.bgop {
+  opacity: 0.5;
+  background: #000;
+  -moz-opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.zi1 {
+  z-index: 1;
+}
+
+//wrap
+.w1180 {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+// triangle 三角箭头
+%triangle-basic {
+  position: absolute;
+  content: "";
+  height: 0;
+  width: 0;
+  line-height: 0;
+  overflow: hidden;
+}
+
+@mixin triangle($direction: top, $borderWidth: 6px, $borderColor: #ccc) {
+  @extend %triangle-basic;
+
+  @if $direction==top {
+    border-top: $borderWidth solid $borderColor;
+    border-left: $borderWidth dashed transparent;
+    border-right: $borderWidth dashed transparent;
+  }
+
+  @else if $direction==right {
+    border-right: $borderWidth solid $borderColor;
+    border-top: $borderWidth dashed transparent;
+    border-bottom: $borderWidth dashed transparent;
+  }
+
+  @else if $direction==bottom {
+    border-bottom: $borderWidth solid $borderColor;
+    border-left: $borderWidth dashed transparent;
+    border-right: $borderWidth dashed transparent;
+  }
+
+  @else if $direction==left {
+    border-left: $borderWidth solid $borderColor;
+    border-top: $borderWidth dashed transparent;
+    border-bottom: $borderWidth dashed transparent;
+  }
+}
+
+//设置按钮
+@mixin btn($fontSize: 16px, $color: #fff, $bgColor: #ec5845) {
+  position: relative;
+  display: block;
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  font-size: $fontSize;
+  text-align: center;
+  line-height: 2.33333333;
+  border-radius: 5px;
+  overflow: hidden;
+  color: $color;
+  background: #ec5845;
+}
+
+//单行隐藏
+@mixin ell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// transition
+@mixin tran {
+  -webkit-transition: all 0.8s ease;
+  -moz-transition: all 0.8s ease;
+  -ms-transition: all 0.8s ease;
+  -o-transition: all 0.8s ease;
+  transition: all 0.8s ease;
+}
+
+@mixin flex {
+  display: -webkit-box; //旧语法
+  display: -webkit-flex; //新语法
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin bg {
+  background: rgba(0, 0, 0, 0.3);
+  filter: progid:dximagetransform.microsoft.gradient(GradientType=0, startColorstr='#30000000', endColorstr='#30000000') \9;
+}
+
+// rem布局
+html {
+  font-size: 50px;
+  min-width: 100%;
+}
+
+@mixin remMideaQuery($minWidth, $fontSize) {
+  @media screen and (min-width: $minWidth) {
+    font-size: $fontSize !important;
+  }
+}
+
+html {
+  @include remMideaQuery(960px, 50px);
+  @include remMideaQuery(1024px, 53.33333333px);
+  @include remMideaQuery(1280px, 66.66666667px);
+  @include remMideaQuery(1366px, 71.14583333px);
+  @include remMideaQuery(1440px, 75px);
+  @include remMideaQuery(1600px, 83.33333333px);
+  @include remMideaQuery(1920px, 100px);
+}
+
+body {
+  font-size: 14px;
+}

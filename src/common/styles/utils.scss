@@ -1,0 +1,82 @@
+.el-tag + .el-tag {
+  margin-left: 0.04rem;
+}
+
+.dataTable {
+  tr {
+    height: 0.6rem;
+  }
+}
+
+.romove__clearfix {
+  .el-form-item::after {
+    clear: none !important;
+  }
+
+  .el-form-item__content::after {
+    clear: none !important;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// 重定义 animate.css中的动画效果
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100px, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100px, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fadeInUp {
+  -webkit-animation-name: fadeinup;
+  animation-name: fadeInUp;
+}
+
+.inline__block {
+  max-width: 2rem;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.inline__block__right {
+  text-align: right;
+  float: right;
+}
+
+.align__center {
+  text-align: center;
+}
