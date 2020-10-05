@@ -29,7 +29,6 @@
           el-table-column(property="username",label="用户名",width="150")
           el-table-column(property="password",label="密码")
     .dialog-footer(slot="footer")
-      el-button(@click="dialogOperatorInfoVisible = false") 取消
       el-button(type="primary",@click="dialogOperatorInfoVisible = false") 确定
   </template>
 <script>

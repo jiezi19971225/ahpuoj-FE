@@ -21,10 +21,10 @@ export default {
       type: String,
       default: 'line-chart',
     },
-    chartData:{
-      type:Array,
-      default:() => []
-    }
+    chartData: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -43,31 +43,29 @@ export default {
     this.chart = echarts.init(document.getElementById(this.id));
   },
   methods: {
-    setOption(){
+    setOption() {
       const chartOption = {
         color: ['#ffdf25', '#36a9ce'],
         tooltip: {},
         legend: {
-          data: this.chartData.map(x => x.legend),
+          data: this.chartData.map((x) => x.legend),
         },
-        grid:{
-          left:'20px',
-          right:'20px'
+        grid: {
+          left: '20px',
+          right: '20px',
         },
         xAxis: {
           type: 'time',
         },
         yAxis: {},
-        series:this.chartData.map(x => {
-          return {
-            name: x.legend,
-            type: 'line',
-            data: x.data,
-          }
-        })
-      }
-      this.chart.setOption(chartOption)
-    }
+        series: this.chartData.map((x) => ({
+          name: x.legend,
+          type: 'line',
+          data: x.data,
+        })),
+      };
+      this.chart.setOption(chartOption);
+    },
   },
 };
 </script>

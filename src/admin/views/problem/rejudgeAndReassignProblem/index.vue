@@ -9,7 +9,7 @@
             el-input(v-model.number="rejudgeSolutionForm.id",@keyup.enter.native="submitRejudgeSolution",placeholder="请输入提交ID")
           el-form-item
             el-button(type="primary",@click="submitRejudgeSolution") 提交
-          el-form(:inline="true",:model="rejudgeProblemForm",ref="rejudgeProblemForm",:rules="rejudgeProblemFormRules",@submit.native.prevent)
+        el-form(:inline="true",:model="rejudgeProblemForm",ref="rejudgeProblemForm",:rules="rejudgeProblemFormRules",@submit.native.prevent)
           el-form-item(label="重判问题",prop="id")
             el-input(v-model.number="rejudgeProblemForm.id",@keyup.enter.native="submitRejudgeProblem",placeholder="请输入问题ID")
           el-form-item
@@ -46,7 +46,7 @@ export default {
         id: [
           {
             required: true,
-            message: '请输入提交ID名称',
+            message: '请输入提交ID',
             trigger: 'blur',
           },
         ],
@@ -55,7 +55,7 @@ export default {
         id: [
           {
             required: true,
-            message: '请输入提交ID名称',
+            message: '请输入问题ID',
             trigger: 'blur',
           },
         ],
@@ -94,19 +94,10 @@ export default {
         if (valid) {
           try {
             const res = await rejudgeSolution(this.rejudgeSolutionForm.id);
-            this.$message({
-              message: res.data.message,
-              type: 'success',
-            });
-
             const pageUrl = `${window.location.protocol}//${window.location.host}/solution/${this.rejudgeSolutionForm.id}`;
             window.open(pageUrl, '_blank');
           } catch (err) {
             console.log(err);
-            this.$message({
-              message: err.response.data.message,
-              type: 'error',
-            });
           }
         } else {
           this.$message({
@@ -123,18 +114,10 @@ export default {
           try {
             console.log(this.rejudgeProblemForm);
             const res = await rejudgeProblem(this.rejudgeProblemForm.id);
-            console.log(res);
-            this.$message({
-              message: res.data.message,
-              type: 'success',
-            });
-            window.open('/status', '_blank');
+            const pageUrl = `${window.location.protocol}//${window.location.host}/status?queryParam=${this.rejudgeProblemForm.id}`;
+            window.open(pageUrl, '_blank');
           } catch (err) {
             console.log(err);
-            this.$message({
-              message: err.response.data.message,
-              type: 'error',
-            });
           }
         } else {
           this.$message({
@@ -156,10 +139,6 @@ export default {
             });
           } catch (err) {
             console.log(err);
-            this.$message({
-              message: err.response.data.message,
-              type: 'error',
-            });
           }
         } else {
           this.$message({

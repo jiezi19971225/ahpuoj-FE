@@ -2,21 +2,23 @@
 .admin-content
   .content-header 近期提交情况
   .chart__wrapper
-    line-chart(:chart-data="chartData",:id="'chart'",style="width:100%;height:500px;")
+    v-chart(style="width:100%;height:500px;",ref="chart",:options="chartOption",autoresize)
 </template>
 
 <script>
-import LineChart from 'common/components/LineChart/index.vue';
 import { getSubmitStatistic } from 'admin/api/admin';
+import 'echarts';
+import chartOption from './chartOption';
+import 'echarts/lib/chart/line';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
 
 export default {
-  name:"home",
-  components: {
-    LineChart,
-  },
+  name: 'home',
   data() {
     return {
       chartData: [],
+      chartOption,
     };
   },
   activated() {
@@ -27,13 +29,9 @@ export default {
       try {
         const { id } = this.$route.params;
         const res = await getSubmitStatistic(id);
-        const { data } = res;
-        this.chartData =  [
-          {
-            legend:'累计提交',
-            data:data.recent_submit_statistic
-          }
-        ]
+        const { data: { recent_submit_statistic } } = res;
+        this.chartOption.series.data = recent_submit_statistic.map((x) => x.count);
+        this.chartOption.xAxis.data = recent_submit_statistic.map((x) => x.date);
       } catch (err) {
         console.log(err);
       }
