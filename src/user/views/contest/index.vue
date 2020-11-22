@@ -48,10 +48,10 @@
                 svg-icon(name="wrong",v-else-if="scope.row.status == 2")
             el-table-column(label="#", width="60")
               template(slot-scope="scope")
-                span {{ engNum(scope.row.num) }}
+                span {{ engNum(scope.$index+1) }}
             el-table-column(label="标题", min-width="180")
               template(slot-scope="scope")
-                router-link(:to="{name:'contestProblem',params:{id:contest.id,num:scope.row.num}}", target="_blank") {{scope.row.title}}
+                router-link(:to="{name:'contestProblem',params:{id:contest.id,num:scope.$index+1}}", target="_blank") {{scope.row.title}}
           p(v-else) {{reason}}
 </template>
 
@@ -62,6 +62,7 @@ import EventBus from 'common/eventbus';
 import { submitJudgeCode } from 'user/api/user';
 
 export default {
+  name: 'contest',
   data() {
     return {
       seeable: false,

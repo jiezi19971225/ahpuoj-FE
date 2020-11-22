@@ -20,18 +20,18 @@
             .section__title 按语言检索：
             ul.button-list
               li
-                el-button(size="mini",round,:class="[queryParams.language == -1?'is-active':'']", @click="handleSearchByLanguage(-1)",) 全部
+                el-button(size="mini",round,:class="[queryParams.language === ''?'is-active':'']", @click="handleSearchByLanguage('')",) 全部
               template(v-for="item,index in langList")
                 li(v-if="item.available")
-                  el-button(size="mini",round,:class="[queryParams.language == index?'is-active':'']",@click="handleSearchByLanguage(index)") {{item.name}}
+                  el-button(size="mini",round,:class="[queryParams.language === index?'is-active':'']",@click="handleSearchByLanguage(index)") {{item.name}}
           li
             .section__title 按结果检索：
             ul.button-list
               li
-                el-button(size="mini",round,:class="[queryParams.result==-1?'is-active':'']", @click="handleSearchByResult(-1)") 全部
+                el-button(size="mini",round,:class="[queryParams.result === ''?'is-active':'']", @click="handleSearchByResult('')") 全部
               template(v-for="item in searchableResultList")
                 li
-                  el-button(size="mini",round,:class="[queryParams.result==item.code?'is-active':'']", @click="handleSearchByResult(item.code)") {{item.name}}
+                  el-button(size="mini",round,:class="[queryParams.result === item.code?'is-active':'']", @click="handleSearchByResult(item.code)") {{item.name}}
       .main.has__pagination
         Paginator(style="float:left;",@change="fetchDataList",:current-page.sync="currentPage",:page-size.sync="perpage",:total="total")
         el-table(size="small",:data="tableData", v-loading="tableLoading")
@@ -97,8 +97,8 @@ export default {
       queryParams: {
         queryParam: '',
         nick: '',
-        language: -1,
-        result: -1,
+        language: '',
+        result: '',
       },
       contestId: 0,
       contestPnum: -1,
@@ -166,8 +166,8 @@ export default {
     handleSearchByResetConf() {
       this.queryParams.queryParam = '';
       this.queryParams.nick = '';
-      this.queryParams.language = -1;
-      this.queryParams.result = -1;
+      this.queryParams.language = '';
+      this.queryParams.result = '';
       this.handleSearch();
     },
     handleSearchMine() {

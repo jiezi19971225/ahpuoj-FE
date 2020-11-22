@@ -29,7 +29,7 @@
                   span(v-if="user") {{user.created_at}}
         .main__section
           h3 近期提交情况
-          line-chart(:chart-data="chartData",:flag="renderFlag",:id="'chart'",style="width:100%;height:5rem;")
+          v-chart(style="width:100%;height:5rem;",ref="chart",:options="chartOption",autoresize)
         .main__section
           h3 已解决的问题
           .problem__links(v-if="user")
@@ -46,17 +46,20 @@
 
 <script>
 import { getUserInfo } from 'user/api/user';
-import LineChart from 'common/components/LineChart/index.vue';
+import 'echarts';
+import chartOption from './chartOption';
+import 'echarts/lib/chart/line';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
 
 export default {
-  components: {
-    LineChart,
-  },
+  name: 'userInfo',
   data() {
     return {
       user: null,
       chartData: [],
       renderFlag: false,
+      chartOption,
     };
   },
 
@@ -71,16 +74,9 @@ export default {
         const { data } = res;
         this.user = data.userinfo;
         this.renderFlag = true;
-        this.chartData = [
-          {
-            legend: '累计通过',
-            data: this.user.recent_solved_statistic,
-          },
-          {
-            legend: '累计提交',
-            data: this.user.recent_submit_statistic,
-          },
-        ];
+        this.chartOption.series[0].data = this.user.recent_solved_statistic.map((x) => x.count);
+        this.chartOption.series[1].data = this.user.recent_submit_statistic.map((x) => x.count);
+        this.chartOption.xAxis.data = this.user.recent_solved_statistic.map((x) => x.date);
       } catch (err) {
         console.log(err);
       }
