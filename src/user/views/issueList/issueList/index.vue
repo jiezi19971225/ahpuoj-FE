@@ -143,33 +143,19 @@ export default {
         res = await postIssue(this.issueForm);
         const issueId = res.data.issue.id;
         res = await replyToIssue(issueId, this.replyForm);
-        this.$message({
-          message: '发布讨论主题成功',
-          type: 'success',
-        });
         this.issueForm.title = '';
         this.replyForm.content = '';
         this.fetchDataList();
       } catch (err) {
-        this.$message({
-          message: err.response.data.message,
-          type: 'error',
-        });
+        console.log(err);
       }
     },
     async toggleIssueStatus(issueId) {
       try {
         const res = await toggleIssueStatus(issueId);
-        this.$message({
-          message: '变更主题状态成功',
-          type: 'success',
-        });
         this.fetchDataList();
       } catch (err) {
-        this.$message({
-          message: err.response.data.message,
-          type: 'error',
-        });
+        console.log(err);
       }
     },
   },

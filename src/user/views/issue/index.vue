@@ -160,19 +160,12 @@ export default {
           this.replyForm.reply_user_id = 0;
         }
         const res = await replyToIssue(this.issue.id, this.replyForm);
-        this.$message({
-          message: res.data.message,
-          type: 'success',
-        });
         this.replyForm.content = '';
         this.replyContent = '';
         this.dialogFormVisible = false;
         this.fetchDataList(false);
       } catch (err) {
-        this.$message({
-          message: err.response.data.message,
-          type: 'error',
-        });
+        console.log(err);
       }
     },
     handleReplyToReply(replyId, replyUserId) {
@@ -191,10 +184,6 @@ export default {
     async toggleReplyStatus(replyId) {
       try {
         const res = await toggleReplyStatus(replyId);
-        this.$message({
-          message: '变更回复状态成功',
-          type: 'success',
-        });
         this.fetchDataList(false);
       } catch (err) {
         this.$message({

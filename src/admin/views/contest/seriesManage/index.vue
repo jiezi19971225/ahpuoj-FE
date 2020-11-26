@@ -3,7 +3,7 @@
   .content-header 系列赛名称: {{series&&series.name}} 包含竞赛总数: {{tableData.length}}
   table-tools
     template(#tool)
-      el-button(icon="el-icon-plus",@click="handleAdd") 新建
+      el-button(icon="el-icon-plus",@click="handleAdd",type="primary") 添加
     template(#search)
       el-input(placeholder="搜索竞赛名称", style="max-width:20em", v-model="queryParam", @keyup.enter.native="handleSearchByParam",maxlength="20", clearable)
         el-button(slot="append",icon="el-icon-search",@click="handleSearchByParam")

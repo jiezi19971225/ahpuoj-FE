@@ -48,8 +48,8 @@
           h3 公开代码
           p 公开你的源码，用你的智慧帮助其他的人解决问题！
           p.mt10 当前状态
-            el-tag(size="mini",type="plain",:type="solution.public == 0 ? 'danger':'success'",effect="dark") {{solution.public == 0 ? "不公开":"公开"}}
-          el-button.mt10(:type="solution.public == 1?'danger':'primary'", @click="handleToggleSolutionStatus") {{solution.public == 1?'隐藏代码':'公开代码'}}
+            el-tag.ml10(size="mini",type="plain",:type="solution.public == 0 ? 'danger':'success'",effect="dark") {{solution.public == 0 ? "不公开":"公开"}}
+          el-button.mt10(:type="solution.public == 1?'danger':'primary'", @click="handleToggleSolutionStatus",size="small") {{solution.public == 1?'隐藏代码':'公开代码'}}
         .main__section
           h3 代码
           code-mirror(v-if="seeable",:code.sync="meta.source",:language="solution.language",:readonly="true",style="height:500px;")

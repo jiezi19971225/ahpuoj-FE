@@ -302,8 +302,6 @@ export default {
         EventBus.$emit('goLogin');
         return;
       }
-      this.submitButtonDisabled = true;
-      this.submitButtonInLoading = true;
       if (this.form.source.length === 0) {
         this.$message({
           message: '代码不能为空',
@@ -311,6 +309,8 @@ export default {
         });
         return;
       }
+      this.submitButtonDisabled = true;
+      this.submitButtonInLoading = true;
       try {
         const res = await submitJudgeCode(this.form);
         this.$router.push({
