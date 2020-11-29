@@ -15,7 +15,7 @@
               span.text-muted {{item.updated_at}}
         Paginator(@change="fetchDataList",:current-page.sync="currentPage",:page-size.sync="perpage",:total="total")
       div(style="margin-top:.2rem;") 本项目基于 HUSTOJ 二次开发，项目地址
-        a(href="https://github.com/ahpulug/ahpuoj",target="_blank")  https://github.com/ahpulug/ahpuoj
+        a(href="https://github.com/jiezi19971225/ahpuojDocker",target="_blank")  https://github.com/jiezi19971225/ahpuojDocker
 </template>
 
 <script>

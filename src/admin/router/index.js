@@ -26,7 +26,8 @@ router.beforeEach(async (to, from, next) => {
       try {
         await store.dispatch('user/GetUserInfo'); // 拉取用户信息
       } catch (err) {
-        Message.error('登录失败');
+        store.dispatch('user/Logout');
+        console.log(err);
       }
     }
     if (store.getters.userRole !== 'user') {

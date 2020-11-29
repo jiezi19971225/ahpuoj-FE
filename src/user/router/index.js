@@ -26,6 +26,7 @@ router.beforeEach(async (to, from, next) => {
         console.log('get user info');
         next();
       } catch (err) {
+        store.dispatch('user/Logout');
         console.log(err);
         next();
       }
