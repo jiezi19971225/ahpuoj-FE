@@ -63,7 +63,7 @@ export default {
           param: this.queryParam,
         });
         const { data } = res;
-        this.tableData = data.data.filter((x) => x.defunct === 0);
+        this.tableData = data.data;
         this.total = this.tableData.length;
         this.tableLoading = false;
       } catch (err) {

@@ -3,10 +3,10 @@
     title(v-if="$route.meta.title") {{$route.meta.title}}
     top-bar
     transition(name='fade', mode="out-in", :duration="{ enter: 500, leave: 0 }",appear, appear-active-class='animated fadeInUp fade-enter-active' enter-active-class='animated fadeInUp fade-enter-active' leave-active-class='animated fade-leave-active')
-      router-view(v-if="$route.meta.keepAlive !== true")
+      router-view(v-if="$route.meta.keepAlive !== true",:key="$route.fullPath")
     transition(name='fade', mode="out-in", :duration="{ enter: 500, leave: 0 }",appear, appear-active-class='animated fadeInUp fade-enter-active' enter-active-class='animated fadeInUp fade-enter-active' leave-active-class='animated fade-leave-active')
       keep-alive
-        router-view(v-if="$route.meta.keepAlive === true")
+        router-view(v-if="$route.meta.keepAlive === true",:key="$route.fullPath")
 </template>
 
 <script>

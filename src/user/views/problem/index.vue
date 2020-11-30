@@ -73,12 +73,19 @@
       .right
         el-input(type="textarea",resize="none",:rows="4",v-model="outputText",disablecursor="text",placeholder="这里显示代码运行结果",readonly)
   .page_footer
-    el-button(plain,size="medium",type="success",@click="submitToTestRun",:disabled="testrunDisabled") {{testrunButtonText}}
-    el-button(size="medium",type="success",:disabled="submitButtonDisabled",:loading="submitButtonInLoading",@click="submitToJudge") 提交
+    .left(v-if="$route.name === 'problem'")
+      //- el-button(plain,size="medium",@click="showProblemlistDrawer",:disabled="testrunDisabled",icon="el-icon-notebook-2") 题目列表
+      el-button(plain,size="medium",@click="jumpProblem('random')",icon="el-icon-magic-stick") 随机跳题
+      el-button(plain,size="medium",@click="jumpProblem('prev')",) 上一题
+      el-button(size="medium",@click="jumpProblem('next')") 下一题
+    .right
+      el-button(plain,size="medium",type="success",@click="submitToTestRun",:disabled="testrunDisabled") {{testrunButtonText}}
+      el-button(size="medium",type="success",:disabled="submitButtonDisabled",:loading="submitButtonInLoading",@click="submitToJudge") 提交
   el-dialog.tal(title="快捷键指南",:visible.sync="dialogVisible",width="800px",:close-on-click-modal="false")
     pre {{helpText}}
     span(slot="footer" class="dialog-footer")
       el-button(ref="submitBtn",type="primary",@click="dialogVisible = false") 确 定
+  problemlistDrawer(ref="problemlistDrawer")
 </template>
 
 <script>
@@ -90,6 +97,7 @@ import {
   getProblem,
   getContestProblem,
   getLanguageList,
+  jumpProblem,
 } from 'user/api/nologin';
 import EventBus from 'common/eventbus';
 import {
@@ -100,12 +108,14 @@ import {
 } from 'user/api/user';
 import { throttle, debounce } from 'throttle-debounce';
 import { setInterval, clearInterval } from 'timers';
+import problemlistDrawer from './problemlistDrawer.vue';
 import helpText from './shortcutHelp';
 
 export default {
   name: 'problem',
   components: {
     CodeMirror,
+    problemlistDrawer,
   },
   data() {
     return {
@@ -216,6 +226,30 @@ export default {
       } catch (err) {
         console.log(err);
         this.$router.replace({ name: '404Page' });
+      }
+    },
+    showProblemlistDrawer() {
+      this.$refs.problemlistDrawer.showDrawer();
+    },
+    // 跳转题目
+    async jumpProblem(action) {
+      const id = Number.parseInt(this.$route.params.id, 10);
+      const queryParams = {
+        action,
+        problemId: id,
+      };
+      try {
+        const res = await jumpProblem(queryParams);
+        const { data } = res;
+        this.$router.push({
+          name: 'problem',
+          params: {
+            id: data.data,
+          },
+        });
+        console.log(res);
+      } catch (error) {
+        console.log(error);
       }
     },
     handleCopyInput() {
@@ -455,7 +489,6 @@ export default {
     }
   }
   .page_footer {
-    text-align: right;
     z-index: 1000;
     background: #fff;
     width: 100%;
@@ -465,8 +498,15 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+    display: flex;
     .el-button {
       margin-right: 0.2rem;
+    }
+    .left {
+      margin-left: 30px;
+    }
+    .right {
+      margin-left: auto;
     }
   }
 }

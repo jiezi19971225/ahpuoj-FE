@@ -18,6 +18,9 @@ export function getIssue({ id, ...data }) {
 export function getProblem(id) {
   return request('GET', `problem/${id}`);
 }
+export function jumpProblem(data) {
+  return request('GET', 'problemjump', data);
+}
 export function getProblemList(data) {
   return request('GET', 'problems', data);
 }
