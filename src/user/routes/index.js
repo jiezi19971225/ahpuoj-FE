@@ -1,4 +1,4 @@
-const layout = () => import('../views/Layout.vue');
+const layout = () => import('../views/Layout.vue')
 
 export default [
   {
@@ -181,4 +181,4 @@ export default [
       },
     ],
   },
-];
+]

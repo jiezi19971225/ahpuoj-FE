@@ -1,22 +1,23 @@
-const path = require('path');
-const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const path = require('path')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
-const productionGzipExtensions = /\.(js|css)(\?.*)?$/i;
+const productionGzipExtensions = /\.(js|css)(\?.*)?$/i
 
 module.exports = {
   lintOnSave: false,
   productionSourceMap: false,
-  chainWebpack: (config) => {
-    config.module.rule('pug')
+  chainWebpack: config => {
+    config.module
+      .rule('pug')
       .test(/\.pug$/)
       .use('pug-html-loader')
       .loader('pug-html-loader')
-      .end();
+      .end()
 
-    const svgRule = config.module.rule('svg');
+    const svgRule = config.module.rule('svg')
     // 清除已有的所有 loader。
     // 如果你不这样做，接下来的 loader 会附加在该规则现有的 loader 之后。
-    svgRule.uses.clear();
+    svgRule.uses.clear()
     svgRule
       .test(/\.svg$/)
       .include.add(path.resolve(__dirname, './src/common/assets/icons'))
@@ -25,15 +26,15 @@ module.exports = {
       .loader('svg-sprite-loader')
       .options({
         symbolId: 'icon-[name]',
-      });
-    const fileRule = config.module.rule('file');
-    fileRule.uses.clear();
+      })
+    const fileRule = config.module.rule('file')
+    fileRule.uses.clear()
     fileRule
       .test(/\.svg$/)
       .exclude.add(path.resolve(__dirname, './src/common/assets/icons'))
       .end()
       .use('file-loader')
-      .loader('file-loader');
+      .loader('file-loader')
   },
   css: {
     loaderOptions: {
@@ -72,15 +73,17 @@ module.exports = {
       // chunks: ['chunk-vendors', 'chunk-common', 'index'],
     },
   },
-  configureWebpack: (config) => {
+  configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') {
-      config.plugins.push(new CompressionWebpackPlugin({
-        filename: '[path].gz[query]',
-        algorithm: 'gzip',
-        test: productionGzipExtensions,
-        threshold: 10240,
-        minRatio: 0.8,
-      }));
+      config.plugins.push(
+        new CompressionWebpackPlugin({
+          filename: '[path].gz[query]',
+          algorithm: 'gzip',
+          test: productionGzipExtensions,
+          threshold: 10240,
+          minRatio: 0.8,
+        })
+      )
     }
     return {
       resolve: {
@@ -91,45 +94,49 @@ module.exports = {
           user: path.resolve(__dirname, 'src/user'),
           admin: path.resolve(__dirname, 'src/admin'),
           common: path.resolve(__dirname, 'src/common'),
+          '@user': path.resolve(__dirname, 'src/user'),
+          '@admin': path.resolve(__dirname, 'src/admin'),
+          '@common': path.resolve(__dirname, 'src/common'),
         },
       },
-    };
+    }
   },
   devServer: {
     open: true,
     hot: true,
-    host: 'localhost',
+    host: '0.0.0.0',
     port: '8888',
     disableHostCheck: true,
     historyApiFallback: {
-      rewrites: [{
-        from: /^\/$/,
-        to: '/index.html',
-      },
-      {
-        from: /^\/admin/,
-        to: '/admin/index.html',
-      },
+      rewrites: [
+        {
+          from: /^\/$/,
+          to: '/index.html',
+        },
+        {
+          from: /^\/admin/,
+          to: '/admin/index.html',
+        },
       ],
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'http://172.16.0.3:8080',
         ws: false,
         changOrigin: true,
         secure: false,
       },
       // 图片显示的本地代理
-      '^/upload': {
-        pathRewrite: { '^/upload': '/web/upload' },
-        target: 'http://localhost:8888',
-        ws: false,
-        changOrigin: true,
-        secure: false,
-      },
+      // '^/upload': {
+      //   pathRewrite: { '^/upload': '/web/upload' },
+      //   target: 'http://172.16.0.3:8888',
+      //   ws: false,
+      //   changOrigin: true,
+      //   secure: false,
+      // },
     },
     // 启动一个本地静态服务器，以显示上传的图片资源，仅用于开发环境测试
     // eslint-disable-next-line global-require
     before: require('./static-server/static-server.js'),
   },
-};
+}

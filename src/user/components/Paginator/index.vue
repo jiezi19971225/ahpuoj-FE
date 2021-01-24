@@ -1,39 +1,52 @@
-<template lang="pug">
-  el-pagination(@size-change="handleSizeChange",@current-change="handleCurrentPageChange",:current-page="currentPage",background,:page-size="pageSize",:pager-count="5",:layout="'prev, pager, next'+(device=='desktop'?',jumper':'')",:total="total")
-</template>
+<script lang="tsx">
+import { useMapState, useRoute, useRouter } from '@common/use'
+import { toRefs, defineComponent, watch } from '@vue/composition-api'
 
-<script>
-import { mapState } from 'vuex';
-
-export default {
+export default defineComponent({
   props: {
-    currentPage: {
-      type: Number,
-      default: 1,
-    },
-    pageSize: {
-      type: Number,
-      default: 10,
-    },
-    total: {
-      type: Number,
-      default: 0,
-    },
+    currentPage: Number,
+    pageSize: Number,
+    asyncPath: Boolean,
   },
-  computed: {
-    ...mapState({
-      device: (state) => state.app.device,
-    }),
+  inheritAttrs: false,
+  setup(props, context) {
+    const states = useMapState({
+      device: (state: any) => state.app.device,
+    })
+
+    const route = useRoute()
+    const router = useRouter()
+
+    const handleChange = () => {
+      console.log(route.value.query)
+      props.asyncPath &&
+        router.replace({
+          query: {
+            ...route.value.query,
+            page: props.currentPage,
+            pageSize: props.pageSize,
+          },
+        })
+      context.emit('change')
+    }
+    return { ...toRefs(states), handleChange }
   },
-  methods: {
-    handleSizeChange(val) {
-      this.$emit('update:pageSize', val);
-      this.$emit('change');
-    },
-    handleCurrentPageChange(val) {
-      this.$emit('update:currentPage', val);
-      this.$emit('change');
-    },
+  render(h) {
+    const { $props, $attrs, $listeners, device, handleChange } = this
+    const bind = {
+      props: {
+        pagerCount: 5,
+        layout: `prev, pager, next${device === 'desktop' ? ',jumper' : ''}`,
+        ...$props,
+        ...$attrs,
+      },
+      on: {
+        ...$listeners,
+        'size-change': handleChange,
+        'current-change': handleChange,
+      },
+    }
+    return <el-pagination {...bind}></el-pagination>
   },
-};
+})
 </script>

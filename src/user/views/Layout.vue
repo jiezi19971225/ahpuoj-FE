@@ -1,19 +1,39 @@
-<template lang="pug">
-  .front__page
-    title(v-if="$route.meta.title") {{$route.meta.title}}
-    top-bar
-    transition(name='fade', mode="out-in", :duration="{ enter: 500, leave: 0 }",appear, appear-active-class='animated fadeInUp fade-enter-active' enter-active-class='animated fadeInUp fade-enter-active' leave-active-class='animated fade-leave-active')
-      router-view(v-if="$route.meta.keepAlive !== true",:key="$route.fullPath")
-    transition(name='fade', mode="out-in", :duration="{ enter: 500, leave: 0 }",appear, appear-active-class='animated fadeInUp fade-enter-active' enter-active-class='animated fadeInUp fade-enter-active' leave-active-class='animated fade-leave-active')
-      keep-alive
-        router-view(v-if="$route.meta.keepAlive === true",:key="$route.fullPath")
+<template>
+  <div class="front__page">
+    <title v-if="$route.meta.title">{{ $route.meta.title }}</title>
+    <top-bar></top-bar>
+    <transition
+      name="fade"
+      mode="out-in"
+      :duration="{ enter: 500, leave: 0 }"
+      appear="appear"
+      appear-active-class="animated fadeInUp fade-enter-active"
+      enter-active-class="animated fadeInUp fade-enter-active"
+      leave-active-class="animated fade-leave-active"
+    >
+      <router-view v-if="$route.meta.keepAlive !== true" :key="$route.fullPath"></router-view>
+    </transition>
+    <transition
+      name="fade"
+      mode="out-in"
+      :duration="{ enter: 500, leave: 0 }"
+      appear="appear"
+      appear-active-class="animated fadeInUp fade-enter-active"
+      enter-active-class="animated fadeInUp fade-enter-active"
+      leave-active-class="animated fade-leave-active"
+    >
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive === true"></router-view>
+      </keep-alive>
+    </transition>
+  </div>
 </template>
 
 <script>
-import TopBar from 'user/components/topbar.vue';
+import TopBar from 'user/components/topbar.vue'
 
-const { body } = document;
-const WIDTH = 960;
+const { body } = document
+const WIDTH = 960
 
 export default {
   name: 'Layout',
@@ -23,30 +43,30 @@ export default {
   data() {
     return {
       screenWidth: document.body.clientWidth,
-    };
+    }
   },
   beforeMount() {
-    window.addEventListener('resize', this.$_resizeHandler);
+    window.addEventListener('resize', this.$_resizeHandler)
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.$_resizeHandler);
+    window.removeEventListener('resize', this.$_resizeHandler)
   },
   mounted() {
-    this.$_resizeHandler();
+    this.$_resizeHandler()
   },
   methods: {
     $_isMobile() {
-      const rect = body.getBoundingClientRect();
-      return rect.width - 1 < WIDTH;
+      const rect = body.getBoundingClientRect()
+      return rect.width - 1 < WIDTH
     },
     $_resizeHandler() {
       if (!document.hidden) {
-        const isMobile = this.$_isMobile();
-        this.$store.dispatch('app/setDevice', isMobile ? 'mobile' : 'desktop');
+        const isMobile = this.$_isMobile()
+        this.$store.dispatch('app/setDevice', isMobile ? 'mobile' : 'desktop')
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped type="text/css">
@@ -61,7 +81,7 @@ export default {
 }
 
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

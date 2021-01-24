@@ -19,9 +19,7 @@
 </template>
 
 <script>
-import { getNewList } from 'user/api/nologin';
 import { sendFindPassEmail, verifyResetPassToken, resetPassByToken } from 'user/api/auth';
-
 
 export default {
   data() {
