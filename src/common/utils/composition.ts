@@ -1,7 +1,7 @@
 import { unref } from '@vue/composition-api'
 
-type plainObj = {
-  [key in string | number]: any
+interface plainObj {
+  [key: string]: any
 }
 
 export function unWrapObj(obj: plainObj) {

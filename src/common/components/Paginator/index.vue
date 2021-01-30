@@ -14,11 +14,12 @@ export default defineComponent({
       device: (state: any) => state.app.device,
     })
 
-    const query = useQuery()
+    const { query } = useQuery()
     const router = useRouter()
 
     const handleChange = () => {
       props.asyncPath &&
+        // @ts-ignore
         router.replace({
           query: {
             ...query.value,

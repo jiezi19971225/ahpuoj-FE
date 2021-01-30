@@ -8,7 +8,6 @@ export function getLanguageList() {
 export function getRankList(data) {
   return request('GET', 'ranklist', data)
 }
-export const getNewList = get('/news')
 
 export function getIssueList({ id, ...data }) {
   return request('GET', `problem/${id}/issues`, data)
@@ -22,7 +21,6 @@ export function getProblem(id) {
 export function jumpProblem(data) {
   return request('GET', 'problemjump', data)
 }
-export const getProblemList = get('/problems')
 
 export function getSolution(id) {
   return request('GET', `solution/${id}`)
@@ -51,4 +49,3 @@ export function getSeriesList(data) {
 export function getSeries(id) {
   return request('GET', `series/${id}`)
 }
-export const getAllTags = get('/alltags')

@@ -1,5 +1,5 @@
 import { ref } from '@vue/composition-api'
-import { useRoute } from './useRouter'
+import { useQuery } from './useRouter'
 
 interface initParams {
   page?: number
@@ -12,19 +12,17 @@ export const usePagination = ({
   perpage: initPerpage,
   total: initTotal,
 }: initParams) => {
-  const route = useRoute()
-  let { page: queryPage, perpage: queryPerpage } = route.value.query
-  queryPage = queryPage ?? ''
-  queryPerpage = queryPerpage ?? ''
+  const { queryParams } = useQuery({
+    page: '',
+    perpage: '',
+  })
 
-  const page = ref<number>(Number(queryPage) || initPage || 1)
-  const perpage = ref<number>(Number(queryPerpage) || initPerpage || 10)
+  const page = ref<number>(Number(queryParams.page) || initPage || 1)
+  const perpage = ref<number>(Number(queryParams.perpage) || initPerpage || 10)
   const total = ref<number>(initTotal || 0)
-  const dataList = ref([])
   return {
     page,
     perpage,
     total,
-    dataList,
   }
 }

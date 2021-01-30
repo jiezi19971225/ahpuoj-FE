@@ -14,7 +14,7 @@ import 'codemirror/lib/codemirror.css'
 import '@babel/polyfill'
 import router from './router'
 import App from './App.vue'
-import './components'
+import '@common/components'
 
 Vue.use(ElementUI)
 Vue.use(VueCompositionApi)

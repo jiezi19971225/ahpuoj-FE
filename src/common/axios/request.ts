@@ -2,10 +2,12 @@ import axios, { AxiosRequestConfig, Method } from 'axios'
 import Cookies from 'js-cookie'
 import { Message } from 'element-ui'
 import { unWrapObj } from 'common/utils/composition'
+import dayjs from 'dayjs'
 
 const baseURL = '/api'
 
 const instance = axios.create()
+const timeFields = ['created_at', 'updated_at']
 
 instance.interceptors.request.use(
   config => {
@@ -21,7 +23,20 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   res => {
-    return res.data
+    res = res.data
+    // 转换时间格式
+    const solve = obj => {
+      Object.keys(obj).forEach(key => {
+        if (typeof obj[key] === 'object') {
+          obj[key] = solve(obj[key])
+        }
+        if (typeof obj[key] === 'string' && timeFields.includes(key) && dayjs(obj[key]).isValid()) {
+          obj[key] = dayjs(obj[key]).format('YYYY-MM-DD hh:mm:ss')
+        }
+      })
+      return obj
+    }
+    return solve(res)
   },
   err => {
     return Promise.reject(err)
@@ -46,7 +61,7 @@ function successState(res) {
   return res
 }
 
-function request(method: Method, url: string, payload = {}, options = {}) {
+function request<T>(method: Method, url: string, payload = {}, options = {}) {
   const methodUpperCase = <string>method.toUpperCase()
   const httpDefault: AxiosRequestConfig = {
     method,
@@ -58,9 +73,9 @@ function request(method: Method, url: string, payload = {}, options = {}) {
     ...options,
   }
 
-  return new Promise(async (resolve, reject) => {
+  return new Promise<T>(async (resolve, reject) => {
     try {
-      const res = await instance(httpDefault)
+      const res = ((await instance(httpDefault)) as unknown) as T
       successState(res)
       resolve(res)
     } catch (err) {
@@ -70,7 +85,7 @@ function request(method: Method, url: string, payload = {}, options = {}) {
   })
 }
 
-export const get = (url: string) => (payload = {}, options = {}) =>
-  request('get', url, payload, options)
+export const get = (url: string) => <T>(payload = {}, options = {}) =>
+  request<T>('get', url, payload, options)
 export const post = (url: string) => (payload = {}, options = {}) =>
   request('post', url, payload, options)

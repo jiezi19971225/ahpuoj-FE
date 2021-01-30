@@ -24,13 +24,9 @@
 </template>
 
 <script>
-import TinymceEditor from 'common/components/tinymce_editor.vue';
-import {
-  createContest,
-  editContest,
-  getContest,
-} from 'admin/api/contest';
-import { getLanguageList } from 'user/api/nologin';
+import TinymceEditor from 'common/components/tinymce_editor.vue'
+import { createContest, editContest, getContest } from 'admin/api/contest'
+import { getLanguageList } from 'user/api/nologin'
 
 export default {
   components: {
@@ -39,35 +35,35 @@ export default {
   data() {
     const validateStartTime = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入开始时间'));
+        callback(new Error('请输入开始时间'))
       } else if (this.form.end_time !== '') {
-        const startTime = new Date(this.form.start_time);
-        const endTime = new Date(this.form.end_time);
+        const startTime = new Date(this.form.start_time)
+        const endTime = new Date(this.form.end_time)
         if (startTime.getTime() < endTime.getTime()) {
-          this.$refs.form.validateField('end_time');
-          callback();
+          this.$refs.form.validateField('end_time')
+          callback()
         } else {
-          callback();
+          callback()
         }
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validateEndTime = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入结束时间'));
+        callback(new Error('请输入结束时间'))
       } else if (this.form.start_time !== '') {
-        const startTime = new Date(this.form.start_time);
-        const endTime = new Date(this.form.end_time);
+        const startTime = new Date(this.form.start_time)
+        const endTime = new Date(this.form.end_time)
         if (startTime.getTime() < endTime.getTime()) {
-          callback();
+          callback()
         } else {
-          callback(new Error('结束必须大于开始时间'));
+          callback(new Error('结束必须大于开始时间'))
         }
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       inited: false,
       langList: [],
@@ -108,109 +104,108 @@ export default {
           },
         ],
       },
-    };
+    }
   },
   computed: {
     private() {
-      return this.form.private;
+      return this.form.private
     },
     teamMode() {
-      return this.form.team_mode;
+      return this.form.team_mode
     },
   },
   watch: {
     private(to) {
       if (to === 0) {
-        this.form.team_mode = 0;
+        this.form.team_mode = 0
       }
     },
     teamMode(to) {
       if (to === 1) {
-        this.form.private = 1;
+        this.form.private = 1
       }
     },
   },
   async activated() {
     if (!this.inited) {
-      const res = await getLanguageList();
-      this.langList = res.data.languages;
+      const res = await getLanguageList()
+      this.langList = res.data.languages
     }
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     async fetchData() {
       if (this.$route.name === 'adminEditContest') {
         try {
-          const { id } = this.$route.params;
-          const res = await getContest(id);
+          const { id } = this.$route.params
+          const res = await getContest(id)
           if (!this.inited) {
-            this.form = res.data.contest;
+            this.form = res.data.contest
           }
-          this.inited = true;
+          this.inited = true
           this.$notify({
             title: '提示',
-            message:
-              '更改公开度与团队模式后私有比赛的参赛人员需要重新进行设置！',
+            message: '更改公开度与团队模式后私有比赛的参赛人员需要重新进行设置！',
             duration: 6000,
-          });
+          })
           // 重新计算selectlist
           // TODO: 改成foreach
           // eslint-disable-next-line no-restricted-syntax
           for (const i in this.langList) {
             // eslint-disable-next-line no-bitwise
             if (this.langList[i].available && this.form.langmask & (1 << i)) {
-              this.selectedLangList.push(this.langList[i].name);
+              this.selectedLangList.push(this.langList[i].name)
             }
           }
         } catch (err) {
-          console.log(err);
-          this.$store.dispatch('tagsView/delViewByRoute', this.$route);
-          this.$router.replace({ name: 'admin404Page' });
+          console.log(err)
+          this.$store.dispatch('tagsView/delViewByRoute', this.$route)
+          this.$router.replace({ name: 'admin404Page' })
         }
       }
       // 计算默认的langmask
       this.langList.forEach((x, index) => {
         if (x.available) {
           // eslint-disable-next-line no-bitwise
-          this.form.langmask |= (1 << index);
+          this.form.langmask |= 1 << index
         }
-      });
+      })
     },
     async submit() {
-      this.$refs.form.validate(async (valid) => {
+      this.$refs.form.validate(async valid => {
         if (valid) {
           try {
             if (this.$route.name === 'adminAddContest') {
-              await createContest(this.form);
+              await createContest(this.form)
             } else {
-              const { id } = this.$route.params;
-              await editContest(id, this.form);
+              const { id } = this.$route.params
+              await editContest(id, this.form)
             }
-            this.$store.dispatch('tagsView/delViewByRoute', this.$route);
-            this.$router.push({ name: 'adminContestList' });
+            this.$store.dispatch('tagsView/delViewByRoute', this.$route)
+            this.$router.push({ name: 'adminContestList' })
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
         } else {
           this.$message({
             message: '表单必填项不能为空',
             type: 'error',
-          });
-          return false;
+          })
+          return false
         }
-      });
+      })
     },
     calcMask() {
-      let langmask = 0;
+      let langmask = 0
       for (let i = 0; i < this.selectedLangList.length; i += 1) {
         for (let j = 0; j < this.langList.length; j += 1) {
           if (this.selectedLangList[i] === this.langList[j].name) {
             // eslint-disable-next-line no-bitwise
-            langmask |= (1 << j);
+            langmask |= 1 << j
           }
         }
       }
-      this.form.langmask = langmask;
+      this.form.langmask = langmask
     },
     notifyModeChange() {
       if (this.form.team_mode === 1) {
@@ -218,12 +213,11 @@ export default {
           title: '提示',
           message: '团队模式只能为私有',
           duration: 6000,
-        });
+        })
       }
     },
   },
-};
+}
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -134,9 +134,9 @@
 </template>
 
 <script lang="tsx">
-import { getProblemList, getAllTags } from '@user/api/nologin'
-import { usePagination, useRoute, useRouter } from '@common/use'
-import { ref, onActivated, reactive, defineComponent } from '@vue/composition-api'
+import { getProblemList, getAllTags } from '@user/api/nologints'
+import { usePagination, useQuery, useRouter } from '@common/use'
+import { ref, onActivated, defineComponent } from '@vue/composition-api'
 import { ProblemDegree, ProblemDegreeMap } from '@common/const/enum'
 
 const problemDegreeList = [
@@ -161,37 +161,33 @@ const problemDegreeList = [
 export default defineComponent({
   name: 'problemSet',
   setup() {
-    const route = useRoute()
     const router = useRouter()
-
+    const { query, queryParams } = useQuery({
+      queryParam: '',
+      tagId: '',
+      level: '',
+    })
     const pagination = usePagination({
       perpage: 50,
     })
-    const queryParams = reactive({
-      queryParam: route.value.query.queryParam ?? '',
-      tagId: route.value.query.tagId ?? '',
-      level: route.value.query.level ?? '',
-    })
     const tableLoading = ref(false)
-    const dataList = ref([])
-    const tags = ref([])
+    const dataList = ref<ProblemListItem[]>([])
+    const tags = ref<Tag[]>([])
 
-    getAllTags().then(res => {
+    getAllTags<TagListResponse>().then(res => {
       tags.value = res.tags
       tags.value.unshift({
         id: '',
         name: '全部',
-      })
+      } as Tag)
     })
 
     const fetchDataList = async () => {
-      window.pageYOffset = 0
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
       tableLoading.value = true
-      console.log('fetchData')
       try {
-        const res: PaginationResponse = await getProblemList({
+        const res = await getProblemList<CommonPaginationResponse<ProblemListItem[]>>({
           page: pagination.page,
           perpage: pagination.perpage,
           tag_id: queryParams.tagId,
@@ -207,8 +203,8 @@ export default defineComponent({
     }
 
     onActivated(() => {
-      if (JSON.stringify(route.value.query) !== '{}') {
-        Object.assign(queryParams, route.value.query)
+      if (JSON.stringify(query.value) !== '{}') {
+        Object.assign(queryParams, query.value)
       }
       fetchDataList()
     })
@@ -217,7 +213,7 @@ export default defineComponent({
       pagination.page.value = 1
       router.push({
         query: {
-          ...route.value.query,
+          ...query.value,
           ...queryParams,
         },
       })
