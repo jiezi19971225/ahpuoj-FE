@@ -122,19 +122,13 @@
             align="center"
           ></el-table-column>
         </el-table>
-        <oj-paginator
-          class="user__pagination"
-          :current-page.sync="page"
-          :page-size.sync="perpage"
-          :total="total"
-        ></oj-paginator>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="tsx">
-import { getProblemList, getAllTags } from '@user/api/nologints'
+<script lang="ts">
+import * as nologinApi from '@user/api/nologints'
 import { usePagination, useQuery, useRouter } from '@common/use'
 import { ref, onActivated, defineComponent } from '@vue/composition-api'
 import { ProblemDegree, ProblemDegreeMap } from '@common/const/enum'
@@ -174,7 +168,7 @@ export default defineComponent({
     const dataList = ref<ProblemListItem[]>([])
     const tags = ref<Tag[]>([])
 
-    getAllTags<TagListResponse>().then(res => {
+    nologinApi.getAllTags<TagListResponse>().then(res => {
       tags.value = res.tags
       tags.value.unshift({
         id: '',
@@ -187,7 +181,7 @@ export default defineComponent({
       document.body.scrollTop = 0
       tableLoading.value = true
       try {
-        const res = await getProblemList<CommonPaginationResponse<ProblemListItem[]>>({
+        const res = await nologinApi.getProblemList<CommonPaginationResponse<ProblemListItem[]>>({
           page: pagination.page,
           perpage: pagination.perpage,
           tag_id: queryParams.tagId,

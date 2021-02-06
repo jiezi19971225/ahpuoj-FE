@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import { Message } from 'element-ui'
 import { unWrapObj } from 'common/utils/composition'
 import dayjs from 'dayjs'
+import { isObject } from 'lodash'
 
 const baseURL = '/api'
 
@@ -27,7 +28,7 @@ instance.interceptors.response.use(
     // 转换时间格式
     const solve = obj => {
       Object.keys(obj).forEach(key => {
-        if (typeof obj[key] === 'object') {
+        if (isObject(obj[key])) {
           obj[key] = solve(obj[key])
         }
         if (typeof obj[key] === 'string' && timeFields.includes(key) && dayjs(obj[key]).isValid()) {
@@ -54,14 +55,14 @@ function errorState(err) {
 function successState(res) {
   if (res.show) {
     Message({
-      message: res.data.message,
+      message: res.message,
       type: 'success',
     })
   }
   return res
 }
 
-function request<T>(method: Method, url: string, payload = {}, options = {}) {
+function request<T = object>(method: Method, url: string, payload = {}, options = {}) {
   const methodUpperCase = <string>method.toUpperCase()
   const httpDefault: AxiosRequestConfig = {
     method,
@@ -87,5 +88,5 @@ function request<T>(method: Method, url: string, payload = {}, options = {}) {
 
 export const get = (url: string) => <T>(payload = {}, options = {}) =>
   request<T>('get', url, payload, options)
-export const post = (url: string) => (payload = {}, options = {}) =>
-  request('post', url, payload, options)
+export const post = (url: string) => <T>(payload = {}, options = {}) =>
+  request<T>('post', url, payload, options)

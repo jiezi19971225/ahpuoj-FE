@@ -37,7 +37,7 @@
 </template>
 
 <script lang="tsx">
-import { getNewList } from '@user/api/nologints'
+import * as nologinApi from '@user/api/nologints'
 import { usePagination } from '@common/use'
 import Paginator from '@user/components/Paginator/index.vue'
 import { ref, onMounted, defineComponent } from '@vue/composition-api'
@@ -49,10 +49,11 @@ export default defineComponent({
     const pagination = usePagination({
       perpage: 5,
     })
-    const dataList = ref<NewData[]>([])
+    const dataList = ref<New[]>([])
     const fetchDataList = async () => {
       try {
-        const res = await getNewList<CommonPaginationResponse<NewData[]>>({
+        // @ts-ignore
+        const res = await nologinApi.getNewList<CommonPaginationResponse<New[]>>({
           page: pagination.page,
           perpage: pagination.perpage,
         } as BasePaginationRequest)

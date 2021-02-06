@@ -5,7 +5,8 @@ module.exports = {
   },
   extends: ['plugin:vue/essential', '@vue/airbnb', '@vue/prettier', '@vue/typescript'],
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@typescript-eslint/parser',
+    extraFileExtensions: ['.vue'],
   },
   plugins: ['simple-import-sort'],
   rules: {
@@ -19,10 +20,12 @@ module.exports = {
     'consistent-return': 'off',
     'no-param-reassign': 'off',
     'no-unused-vars': 'off',
+    'import/prefer-default-export': 'off',
   },
   overrides: [
     {
-      files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
+      parser: '@typescript-eslint/parser',
+      files: ['**/__tests__/*.{j}s?(x)', '**/tests/unit/**/*.spec.{j}s?(x)'],
       env: {
         jest: true,
       },

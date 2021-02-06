@@ -9,6 +9,7 @@ import ECharts from 'vue-echarts'
 import Base from 'common/base'
 import VueCodemirror from 'vue-codemirror'
 import VueCompositionApi from '@vue/composition-api'
+import VueClipboard from 'vue-clipboard2'
 import store from './store'
 import 'codemirror/lib/codemirror.css'
 import '@babel/polyfill'
@@ -19,6 +20,7 @@ import '@common/components'
 Vue.use(ElementUI)
 Vue.use(VueCompositionApi)
 Vue.use(VueCodemirror)
+Vue.use(VueClipboard)
 Vue.use(Base) // 注册的全局函数
 
 // Vue.config.productionTip = false

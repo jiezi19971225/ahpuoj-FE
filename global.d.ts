@@ -1,28 +1,4 @@
-declare interface BasePaginationRequest {
-  page: number | Ref<number>
-  perpage: number | Ref<number>
-}
-
-declare interface BaseResponse<T = object> {
-  message?: string
-  show?: boolean
-  data?: T
-}
-
-declare interface PaginationResponse {
-  page: number
-  perpage: number
-  total: number
-}
-
-declare interface CommonPaginationResponse<T = object>
-  extends BaseResponse<T>,
-    PaginationResponse {}
-
-declare interface TagListResponse extends CommonPaginationResponse {
-  tags: TagData[]
-}
-
+/* eslint-disable camelcase */
 declare interface New {
   content: string
   created_at: string
@@ -49,4 +25,60 @@ declare interface ProblemListItem {
   submit: number
   tags: Tag[]
   title: string
+}
+
+declare interface Problem {
+  id: number
+  title: string
+  description: string
+  level: number
+  defunct: number
+  submit: nunmber
+  accepted: number
+  solved: number
+  hint: string
+  sample_input: string
+  sample_output: string
+  input: string
+  output: string
+  memory_limit: number
+  time_limit: number
+  spj: number
+  tags: Tag[]
+  creator_id: number
+  created_at: string
+  updated_at: string
+}
+
+declare interface LangListItem {
+  name: string
+  available: boolean
+}
+
+declare interface BasePaginationRequest {
+  page: number | Ref<number>
+  perpage: number | Ref<number>
+}
+
+declare interface BaseResponse<T = object> {
+  message?: string
+  show?: boolean
+  data?: T
+}
+
+declare interface PaginationResponse {
+  page: number
+  perpage: number
+  total: number
+}
+
+declare interface CommonPaginationResponse<T = object>
+  extends BaseResponse<T>,
+    PaginationResponse {}
+
+declare interface TagListResponse extends CommonPaginationResponse {
+  tags: TagData[]
+}
+declare interface LangListResponse extends CommonPaginationResponse {
+  languages: LangListItem[]
 }

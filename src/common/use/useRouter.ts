@@ -8,17 +8,17 @@ import {
   UnwrapRef,
 } from '@vue/composition-api'
 
-export function useRoute() {
+export const useRoute = () => {
   const vm = getCurrentInstance().proxy
   return computed(() => vm.$route as Route)
 }
 
-export function useRouter() {
+export const useRouter = () => {
   const vm = getCurrentInstance().proxy
   return vm.$router as VueRouter
 }
 
-export function useQuery<T extends object>(params?: T) {
+export const useQuery = <T extends object>(params?: T) => {
   const route = useRoute()
   const query = ref<Route['query']>(route.value.query)
 
