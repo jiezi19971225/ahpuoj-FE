@@ -209,7 +209,7 @@ import * as nologinApi from '@user/api/nologints'
 import EventBus from '@common/eventbus'
 import * as userApi from '@user/api/userts'
 import { setInterval, clearInterval } from 'timers'
-import { clipboard } from '@common/directives'
+import { clipboard } from '@common/directives/clipboard'
 import { computed, reactive, ref } from '@vue/composition-api'
 import { useLangList, useMapState, useMessge, useRoute, useRouter } from '@common/use'
 import { getAlphabetNumber } from '@common/utils'
@@ -237,12 +237,12 @@ interface TestrunResponse {
   show: boolean
 }
 
-// interface TestrunResponse {
-//   // eslint-disable-next-line camelcase
-//   custom_output: string
-//   message: string
-//   show: boolean
-// }
+interface SubmitCodeResponse {
+  // eslint-disable-next-line camelcase
+  message: string
+  show: true
+  solution: Solution
+}
 
 export default {
   name: 'problem',
@@ -359,15 +359,17 @@ export default {
         router.push({
           name: 'status',
           query: {
-            queryParam: problem.value.id,
+            queryParam: problem.value.id.toString(),
           },
         })
       } else {
         const num = Number.parseInt(route.value.params.num, 10)
         router.push({
           name: 'contestStatus',
+          // TODO: 传参移动到 query 中
           params: {
-            id: route.value.params.id,
+            id: route.value.params.id.toString(),
+            // @ts-ignore
             query: {
               queryParam: getAlphabetNumber(num),
             },
@@ -386,7 +388,9 @@ export default {
         const res = await nologinApi.jumpProblem<BaseResponse<number>>(queryParams)
         router.push({
           name: 'problem',
+          // TODO: 传参移动到 query 中
           params: {
+            // @ts-ignore
             id: res.data,
           },
         })
@@ -446,13 +450,13 @@ export default {
         })
         return
       }
-      // submitButtonInLoading.value = true
+      submitButtonInLoading.value = true
 
       try {
-        const res = await userApi.submitJudgeCode(form)
+        const res = await userApi.submitJudgeCode<SubmitCodeResponse>(form)
         router.push({
           name: 'solution',
-          params: { id: res.solution.solution_id },
+          params: { id: res.solution.solution_id.toString() },
         })
       } catch (err) {
         console.log(err)

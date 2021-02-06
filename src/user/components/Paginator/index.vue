@@ -14,7 +14,7 @@ export default defineComponent({
       device: (state: any) => state.app.device,
     })
 
-    const query = useQuery()
+    const { query } = useQuery()
     const router = useRouter()
 
     const handleChange = () => {
@@ -22,8 +22,8 @@ export default defineComponent({
         router.replace({
           query: {
             ...query.value,
-            page: props.currentPage,
-            pageSize: props.pageSize,
+            page: props.currentPage.toString(),
+            pageSize: props.pageSize.toString(),
           },
         })
       context.emit('change')

@@ -50,6 +50,26 @@ declare interface Problem {
   updated_at: string
 }
 
+declare interface Solution {
+  code_length: number
+  contest_id: number
+  in_date: string
+  ip: string
+  judger: string
+  judgetime: string
+  language: number
+  lint_error: number
+  memory: number
+  num: number
+  pass_rate: number
+  problem_id: number
+  result: number
+  solution_id: number
+  team_id: number
+  time: number
+  user_id: number
+  valid: number
+}
 declare interface LangListItem {
   name: string
   available: boolean
