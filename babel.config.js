@@ -7,5 +7,9 @@ module.exports = {
       },
     ],
   ],
-  plugins: ['lodash', ['@babel/plugin-transform-modules-commonjs', { strictMode: false }]],
+  plugins: [
+    'lodash',
+    ['import', { libraryName: 'ant-design-vue', libraryDirectory: 'es' }],
+    ['@babel/plugin-transform-modules-commonjs', { strictMode: false }],
+  ],
 }

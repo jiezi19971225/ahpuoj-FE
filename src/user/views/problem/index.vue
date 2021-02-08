@@ -330,7 +330,7 @@ export default {
       }
     } catch (err) {
       console.log(err)
-      router.replace({ name: '404Page' })
+      EventBus.$emit('errors', 404)
     }
 
     const problemTitle = computed(() => {
