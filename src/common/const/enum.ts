@@ -11,3 +11,9 @@ export const ProblemDegreeMap = {
   [ProblemDegree.Medium]: '中等',
   [ProblemDegree.Hard]: '困难',
 }
+
+export enum ContestStatus {
+  NotStart = 1,
+  Running = 2,
+  Finish = 3,
+}

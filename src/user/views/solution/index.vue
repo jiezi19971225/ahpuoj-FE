@@ -78,7 +78,14 @@
           <p>{{ solution && renderWrongInfo }}</p>
         </div>
         <!-- 非比赛模式下 代码提交者可以下载样例--><template
-          v-if="solution &amp;&amp; meta.runtime_info &amp;&amp; $store.getters.userId==solution.user_id &amp;&amp; solution.contest_id == 0  &amp;&amp; solution.result &gt;= 5 &amp;&amp; solution.result &lt;= 8"
+          v-if="
+            solution &&
+            meta.runtime_info &&
+            $store.getters.userId == solution.user_id &&
+            solution.contest_id == 0 &&
+            solution.result >= 5 &&
+            solution.result <= 8
+          "
         >
           <div class="main__section">
             <h3>测试点数据下载</h3>
@@ -100,7 +107,12 @@
         </template>
         <div
           class="main__section"
-          v-if="solution &amp;&amp; solution.contest_id == 0 &amp;&amp; solution.result == 4 &amp;&amp; $store.getters.userId == solution.user_id"
+          v-if="
+            solution &&
+            solution.contest_id == 0 &&
+            solution.result == 4 &&
+            $store.getters.userId == solution.user_id
+          "
         >
           <h3>公开代码</h3>
           <p>公开你的源码，用你的智慧帮助其他的人解决问题！</p>

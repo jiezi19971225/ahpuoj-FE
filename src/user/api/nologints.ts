@@ -18,3 +18,5 @@ export const getSolutionList = get('/solutions')
 export const getSolution = id => get(`/solution/${id}`)
 /** 获取竞赛作业列表 */
 export const getContestList = get(`/contests`)
+/** 获取竞赛作业详情 */
+export const getContest = id => get(`/contest/${id}`)
