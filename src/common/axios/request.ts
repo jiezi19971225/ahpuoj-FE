@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 import { Message } from 'element-ui'
 import { unWrapObj } from 'common/utils/composition'
 import dayjs from 'dayjs'
-import { isObject } from 'lodash'
+import { isObject, merge } from 'lodash'
 
 const baseURL = '/api'
 
@@ -45,8 +45,12 @@ instance.interceptors.response.use(
 )
 
 function errorState(err) {
+  let { message } = err.response.data
+  if (err.response.data instanceof Blob) {
+    message = '服务器发生错误'
+  }
   Message({
-    message: err.response.data.message,
+    message,
     type: 'error',
   })
   return err
@@ -74,19 +78,22 @@ function request<T = object>(method: Method, url: string, payload = {}, options 
     ...options,
   }
 
-  return new Promise<T>(async (resolve, reject) => {
-    try {
-      const res = ((await instance(httpDefault)) as unknown) as T
-      successState(res)
-      resolve(res)
-    } catch (err) {
-      errorState(err)
-      reject(err)
-    }
+  return new Promise<T>((resolve, reject) => {
+    instance(httpDefault)
+      .then(res => {
+        successState(res)
+        resolve((res as unknown) as T)
+      })
+      .catch(err => {
+        errorState(err)
+        reject(err)
+      })
   })
 }
 
-export const get = (url: string) => <T>(payload = {}, options = {}) =>
-  request<T>('get', url, payload, options)
-export const post = (url: string) => <T>(payload = {}, options = {}) =>
-  request<T>('post', url, payload, options)
+export const get = (url: string, defaultOptions?) => <T>(payload = {}, options = {}) =>
+  request<T>('get', url, payload, merge(defaultOptions, options))
+export const post = (url: string, defaultOptions?) => <T>(payload = {}, options = {}) =>
+  request<T>('post', url, payload, merge(defaultOptions, options))
+export const put = (url: string, defaultOptions?) => <T>(payload = {}, options = {}) =>
+  request<T>('put', url, payload, merge(defaultOptions, options))

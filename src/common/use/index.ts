@@ -12,3 +12,7 @@ export const useVue = () => {
 export const useMessge = () => {
   return useVue().$message
 }
+
+export const useLoading = () => {
+  return useVue().$loading
+}

@@ -56,7 +56,7 @@ export default defineComponent({
         const res = await nologinApi.getNewList<CommonPaginationResponse<New[]>>({
           page: pagination.page,
           perpage: pagination.perpage,
-        } as BasePaginationRequest)
+        })
         dataList.value = res.data
         pagination.total.value = res.total
       } catch (err) {

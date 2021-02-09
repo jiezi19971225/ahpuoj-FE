@@ -1,4 +1,4 @@
-import { get, post } from '@common/axios/request'
+import { get, post, put } from '@common/axios/request'
 
 /** 获取最新递交的源码 */
 export const getLatestSource = id => get(`/problem/${id}/latestsource`)
@@ -8,3 +8,9 @@ export const getLatestContestSource = (id, num) => get(`/contest/${id}/problem/$
 export const submitTestRunCode = post('/testrun')
 /** 提交评测 */
 export const submitJudgeCode = post('/submit')
+/** 更改记录公开状态 */
+export const toggleSolutionStatus = id => put(`/solution/${id}/status`)
+/** 下载数据文件 */
+export const downloadDatafile = get(`/datafile`, {
+  responseType: 'blob',
+})

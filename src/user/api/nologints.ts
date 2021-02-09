@@ -14,3 +14,5 @@ export const getAllTags = get('/alltags')
 export const jumpProblem = get('/problemjump')
 /** 获取评测记录列表 */
 export const getSolutionList = get('/solutions')
+/** 获取评测记录详情 */
+export const getSolution = id => get(`/solution/${id}`)

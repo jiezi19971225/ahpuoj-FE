@@ -490,9 +490,6 @@ export default defineComponent({
       submitToJudge,
     }
   },
-  computed: {
-    ...mapState(['user']),
-  },
 })
 </script>
 <style lang="scss" scoped>

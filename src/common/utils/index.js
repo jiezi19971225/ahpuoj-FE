@@ -52,3 +52,19 @@ export const secToTimeStr = sec => {
   ).padStart(2, '0')}`
   return res
 }
+
+/**
+ * 处理文件下载
+ * @param {*} resp
+ */
+export const handleDownloadFile = resp => {
+  const url = window.URL.createObjectURL(new Blob([resp]))
+  const downloadElement = document.createElement('a')
+  downloadElement.style.display = 'none'
+  downloadElement.href = url
+  downloadElement.setAttribute('download', filename)
+  document.body.appendChild(downloadElement)
+  downloadElement.click()
+  document.body.removeChild(downloadElement)
+  window.URL.revokeObjectURL(url)
+}

@@ -233,12 +233,12 @@ export default {
 
     const tableLoading = ref(false)
     const contestId = ref(0)
-    const dataList = ref<SolutionItem[]>([])
+    const dataList = ref<SolutionInfo[]>([])
 
     const fetchDataList = async () => {
       try {
         tableLoading.value = true
-        const res = await nologinApi.getSolutionList<CommonPaginationResponse<SolutionItem[]>>({
+        const res = await nologinApi.getSolutionList<CommonPaginationResponse<SolutionInfo[]>>({
           contest_id: contestId.value,
           page: pagination.page,
           perpage: pagination.perpage,
