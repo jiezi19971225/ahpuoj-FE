@@ -13,7 +13,9 @@ pipeline {
               echo 'start build image'
               script{
                 docker.withRegistry('https://ccr.ccs.tencentyun.com', 'dockerAccount') {
-                  def customImage = docker.build("ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:${env.BUILD_NUMBER}")
+                  def customImage = docker.build("ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe")
+                  customImage.push()
+                  customImage.tag("v${env.BUILD_NUMBER}")
                   customImage.push()
                 }
               }
