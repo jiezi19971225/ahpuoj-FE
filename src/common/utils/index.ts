@@ -57,7 +57,7 @@ export const secToTimeStr = sec => {
  * 处理文件下载
  * @param {*} resp
  */
-export const handleDownloadFile = resp => {
+export const handleDownloadFile = (resp, filename) => {
   const url = window.URL.createObjectURL(new Blob([resp]))
   const downloadElement = document.createElement('a')
   downloadElement.style.display = 'none'

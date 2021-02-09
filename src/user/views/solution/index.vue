@@ -261,7 +261,7 @@ export default defineComponent({
           sid: solution.value.solution_id,
           filename,
         })
-        handleDownloadFile(res)
+        handleDownloadFile(res, filename)
       } catch (err) {
         console.log(err)
       } finally {

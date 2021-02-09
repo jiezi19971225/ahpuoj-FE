@@ -121,7 +121,8 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'http://172.16.0.3:8080',
+        target: 'http://localhost:8080',
+        // target: 'http://172.16.0.3:8080',
         ws: false,
         changOrigin: true,
         secure: false,

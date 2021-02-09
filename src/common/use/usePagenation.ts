@@ -11,7 +11,7 @@ export const usePagination = ({
   page: initPage,
   perpage: initPerpage,
   total: initTotal,
-}: initParams) => {
+}: initParams = {}) => {
   const { queryParams } = useQuery({
     page: '',
     perpage: '',

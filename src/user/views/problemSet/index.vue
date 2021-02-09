@@ -200,7 +200,6 @@ export default defineComponent({
           param: queryParams.queryParam,
         })
         dataList.value = res.data
-
         pagination.total.value = res.total
       } catch (err) {
         console.log(err)

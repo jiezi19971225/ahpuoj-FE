@@ -16,3 +16,5 @@ export const jumpProblem = get('/problemjump')
 export const getSolutionList = get('/solutions')
 /** 获取评测记录详情 */
 export const getSolution = id => get(`/solution/${id}`)
+/** 获取竞赛作业列表 */
+export const getContestList = get(`/contests`)

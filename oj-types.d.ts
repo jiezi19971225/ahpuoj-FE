@@ -1,5 +1,24 @@
 /* eslint-disable camelcase */
 export declare global {
+  declare interface CreatorInfo {
+    username: string
+  }
+
+  declare interface User {
+    id: number
+    email: string
+    username: string
+    nick: string
+    avatar: string
+    submit: number
+    solved: number
+    defunct: number
+    created_at: string
+    updated_at: string
+    is_compete_user: number
+    role_id: number
+  }
+
   declare interface New {
     content: string
     created_at: string
@@ -79,6 +98,38 @@ export declare global {
     public: number
     username: string
   }
+
+  declare interface Team {
+    id: number
+    name: string
+    created_at: string
+    updated_at: string
+    is_deleted: string
+    creator_id: number
+    userinfos: User[]
+  }
+
+  declare interface Contest {
+    id: number
+    name: string
+    end_time: string
+    start_time: string
+    description: string
+    defunct: number
+    private: number
+    team_mode: number
+    langmask: number
+    created_at: string
+    updated_at: string
+    is_deleted: string
+    creator_id: number
+    problems: Problem[]
+    users: User[]
+    teams: Team[]
+  }
+
+  declare interface ContestDto extends Contest, CreatorInfo {}
+
   declare interface LangListItem {
     name: string
     available: boolean
