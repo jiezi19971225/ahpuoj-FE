@@ -6,6 +6,7 @@ import {
   ref,
   reactive,
   UnwrapRef,
+  set,
 } from '@vue/composition-api'
 
 export const useRoute = () => {
@@ -30,7 +31,7 @@ export const useQuery = <T extends object>(params?: T) => {
   if (params) {
     queryParams = reactive({} as T)
     Object.keys(params).forEach(key => {
-      queryParams[key] = query.value[key] ?? ''
+      set(queryParams, key, query.value[key] ?? '')
     })
   }
 

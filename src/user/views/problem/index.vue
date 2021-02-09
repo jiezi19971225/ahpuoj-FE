@@ -210,7 +210,7 @@ import EventBus from '@common/eventbus'
 import * as userApi from '@user/api/userts'
 import { setInterval, clearInterval } from 'timers'
 import { clipboard } from '@common/directives/clipboard'
-import { computed, reactive, ref } from '@vue/composition-api'
+import { computed, defineComponent, reactive, ref } from '@vue/composition-api'
 import { useLangList, useMapState, useMessge, useRoute, useRouter } from '@common/use'
 import { getAlphabetNumber } from '@common/utils'
 import problemlistDrawer from './problemlistDrawer.vue'
@@ -244,7 +244,7 @@ interface SubmitCodeResponse {
   solution: Solution
 }
 
-export default {
+export default defineComponent({
   name: 'problem',
   components: {
     CodeMirror,
@@ -493,7 +493,7 @@ export default {
   computed: {
     ...mapState(['user']),
   },
-}
+})
 </script>
 <style lang="scss" scoped>
 .problem__page {

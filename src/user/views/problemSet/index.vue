@@ -4,7 +4,7 @@
       <div class="siderbar">
         <ul class="siderbar__item__list">
           <li>
-            <el-button size="mini" round="round" @click="handleSearchByResetConf">重置</el-button>
+            <el-button size="mini" round="round" @click="handleResetSearch">重置</el-button>
           </li>
           <li>
             <div class="section__title">查找问题：</div>
@@ -33,7 +33,11 @@
                   :class="[
                     queryParams.level.toString() === item.value.toString() ? 'is-active' : '',
                   ]"
-                  @click="handleSearchByLevel(item.value)"
+                  @click="
+                    handleSearch({
+                      level: item.value,
+                    })
+                  "
                   >{{ item.desc }}</el-button
                 >
               </li>
@@ -47,7 +51,11 @@
                   size="mini"
                   round="round"
                   :class="[queryParams.tagId.toString() === tag.id.toString() ? 'is-active' : '']"
-                  @click="handleSearchByTag(tag.id)"
+                  @click="
+                    handleSearch({
+                      tagId: tag.id,
+                    })
+                  "
                   >{{ tag.name }}</el-button
                 >
               </li>
@@ -132,6 +140,7 @@ import * as nologinApi from '@user/api/nologints'
 import { usePagination, useQuery, useRouter } from '@common/use'
 import { ref, onActivated, defineComponent } from '@vue/composition-api'
 import { ProblemDegree, ProblemDegreeMap } from '@common/const/enum'
+import { isEmpty } from 'lodash'
 
 const problemDegreeList = [
   {
@@ -155,12 +164,14 @@ const problemDegreeList = [
 export default defineComponent({
   name: 'problemSet',
   setup() {
-    const router = useRouter()
-    const { query, queryParams } = useQuery({
+    const defaultQuery = {
       queryParam: '',
       tagId: '',
       level: '',
-    })
+    }
+
+    const router = useRouter()
+    const { query, queryParams } = useQuery(defaultQuery)
     const pagination = usePagination({
       perpage: 50,
     })
@@ -189,21 +200,24 @@ export default defineComponent({
           param: queryParams.queryParam,
         })
         dataList.value = res.data
-        tableLoading.value = false
+
         pagination.total.value = res.total
       } catch (err) {
         console.log(err)
+      } finally {
+        tableLoading.value = false
       }
     }
 
     onActivated(() => {
-      if (JSON.stringify(query.value) !== '{}') {
+      if (!isEmpty(query.value)) {
         Object.assign(queryParams, query.value)
       }
       fetchDataList()
     })
 
-    const handleSearch = () => {
+    const handleSearch = (queryObj = {}) => {
+      Object.assign(queryParams, queryObj)
       pagination.page.value = 1
       router.push({
         query: {
@@ -213,21 +227,10 @@ export default defineComponent({
       })
       fetchDataList()
     }
+    const handleResetSearch = () => {
+      handleSearch(defaultQuery)
+    }
 
-    const handleSearchByTag = tagId => {
-      queryParams.tagId = tagId
-      handleSearch()
-    }
-    const handleSearchByLevel = level => {
-      queryParams.level = level
-      handleSearch()
-    }
-    const handleSearchByResetConf = () => {
-      queryParams.level = ''
-      queryParams.tagId = ''
-      queryParams.queryParam = ''
-      handleSearch()
-    }
     const calcRate = row => {
       const rate = row.submit === 0 ? 0 : row.accepted / row.submit
       return `${(rate * 100).toFixed(2)}%`
@@ -240,11 +243,10 @@ export default defineComponent({
       dataList,
       tableLoading,
       queryParams,
+
       fetchDataList,
       handleSearch,
-      handleSearchByTag,
-      handleSearchByLevel,
-      handleSearchByResetConf,
+      handleResetSearch,
       calcRate,
     }
   },

@@ -1,3 +1,5 @@
+import { staticAssetsBase } from '@common/const'
+
 /**
  * @param {string} path
  * @returns {Boolean}
@@ -7,7 +9,17 @@ export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
 
-export function getAlphabetNumber(num) {
+/** 转化相对url为绝对url */
+export const getAbsoluteUrl = relativeUrl => staticAssetsBase + relativeUrl
+
+/**
+ * 将数字序号转化成字母表序号
+ * @param {number} num 数字序号
+ * @example
+ * 1 => A
+ * 3 => C
+ */
+export const getAlphabetNumber = num => {
   let alphtbetNumber = ''
   while (num) {
     alphtbetNumber = String.fromCharCode(64 + (num % 26)) + alphtbetNumber
@@ -16,8 +28,13 @@ export function getAlphabetNumber(num) {
   }
   return alphtbetNumber
 }
-
-export function secToTimeStr(sec) {
+/**
+ * 将秒数转化成时间格式化形式
+ * @param {number} sec 秒数
+ * @example
+ * 3600 => 01:00:00
+ */
+export const secToTimeStr = sec => {
   let res = ''
   const days = Math.floor(sec / (24 * 3600))
   let left = sec % (24 * 3600)

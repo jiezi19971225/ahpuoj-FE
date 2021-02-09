@@ -10,6 +10,7 @@ export const getProblem = id => get(`/problem/${id}`)
 export const getContestProblem = (id, num) => get(`contest/${id}/problem/${num}`)
 /** 获取标签列表 */
 export const getAllTags = get('/alltags')
-
 /** 获取跳转题目ID */
 export const jumpProblem = get('/problemjump')
+/** 获取评测记录列表 */
+export const getSolutionList = get('/solutions')

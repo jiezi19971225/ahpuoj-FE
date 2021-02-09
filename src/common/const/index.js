@@ -1,6 +1,7 @@
 export const server = `${window.location.origin}/`
-export const staticAssetsBase =
-  process.env.NODE_ENV === 'production' ? `${window.location.origin}/` : 'http://localhost:8888/'
+export const staticAssetsBase = 'http://172.16.0.3/'
+// export const staticAssetsBase =
+//   process.env.NODE_ENV === 'production' ? `${window.location.origin}/` : 'http://localhost:8888/'
 
 // 线上环境 由 nginx 反代  本地环境，需要手动代理到8080端口
 export const apiPort = process.env.NODE_ENV === 'production' ? '' : ':8080'
@@ -78,6 +79,7 @@ export const resultList = [
     description: '',
   },
 ]
+
 export const langList = [
   'C',
   'Cpp',

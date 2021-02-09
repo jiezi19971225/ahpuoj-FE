@@ -70,6 +70,14 @@ declare interface Solution {
   user_id: number
   valid: number
 }
+
+declare interface SolutionItem extends Solution {
+  avatar: string
+  nick: string
+  problem_title: string
+  public: number
+  username: string
+}
 declare interface LangListItem {
   name: string
   available: boolean
