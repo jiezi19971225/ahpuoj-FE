@@ -67,7 +67,6 @@
         <oj-paginator
           style="float: left"
           @change="fetchDataList"
-          async-path
           :current-page.sync="page"
           :page-size.sync="perpage"
           :total="total"

@@ -6,7 +6,10 @@ export default defineComponent({
   props: {
     currentPage: Number,
     pageSize: Number,
-    asyncPath: Boolean,
+    syncQuery: {
+      type: Boolean,
+      default: true,
+    },
   },
   inheritAttrs: false,
   setup(props, context) {
@@ -18,7 +21,7 @@ export default defineComponent({
     const router = useRouter()
 
     const handleChange = () => {
-      props.asyncPath &&
+      props.syncQuery &&
         // @ts-ignore
         router.replace({
           query: {

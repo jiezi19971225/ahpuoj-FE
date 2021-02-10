@@ -20,3 +20,7 @@ export const getUserInfo = id => get(`/user/${id}`)
 export const resetNick = put('/user/nick')
 /** 重设密码 */
 export const resetPassword = put('/user/password')
+/** 发表主题 */
+export const postIssue = post('/issue')
+/** 发表回复 */
+export const replyToIssue = id => post(`/issue/${id}/reply`)

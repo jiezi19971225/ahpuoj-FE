@@ -26,3 +26,7 @@ export const getRankList = get(`/ranklist`)
 export const getContestRankList = id => get(`contest/${id}/ranklist`)
 /** 获取竞赛作业团队排名 */
 export const getContestTeamRankList = id => get(`contest/${id}/teamranklist`)
+/** 获取话题 */
+export const getIssue = id => get(`/issue/${id}`)
+/** 获取话题列表 */
+export const getIssueList = pid => get(`/problem/${pid}/issues`)

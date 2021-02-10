@@ -101,7 +101,6 @@
       <div class="main has__pagination">
         <oj-paginator
           style="float: left"
-          async-path
           @change="fetchDataList"
           :current-page.sync="page"
           :page-size.sync="perpage"

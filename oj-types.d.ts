@@ -130,6 +130,55 @@ export declare global {
 
   declare interface ContestDto extends Contest, CreatorInfo {}
 
+  declare interface Reply {
+    id: number
+    issue_id: number
+    user_id: number
+    reply_id: number
+    reply_user_id: number
+    created_at: string
+    updated_at: string
+    content: string
+    is_deleted: number
+    status: number
+  }
+
+  declare interface ReplyInfoDto extends Reply {
+    created_at: string
+    updated_at: string
+    username: string
+    rnick: string
+    user_nick: string
+    avatar: string
+    reply_count: number
+    sub_replys: ReplyInfoDto[]
+  }
+  declare interface Issue {
+    created_at: string
+    id: number
+    is_deleted: number
+    problem_id: number
+    replys: Reply[]
+    title: string
+    updated_at: string
+    user_id: number
+  }
+
+  declare interface IssueInfoDto {
+    avatar: string
+    created_at: string
+    id: number
+    is_deleted: number
+    nick: string
+    problem_id: number
+    ptitle: string | null
+    reply_count: number
+    replys: Reply[]
+    title: string
+    updated_at: string
+    user_id: number
+    username: number
+  }
   declare interface LangListItem {
     name: string
     available: boolean
