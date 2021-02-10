@@ -3,33 +3,34 @@
     <transition>
       <router-view></router-view>
     </transition>
+    <auth-form />
   </div>
 </template>
 
 <script>
 import '@user/styles/main.scss'
 import EventBus from '@common/eventbus'
+import AuthForm from '@user/components/AuthForm/index.vue'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'App',
-  mounted() {
+  components: {
+    'auth-form': AuthForm,
+  },
+  setup() {
     document.body.removeChild(document.getElementById('Loading'))
-    this.initGlobalHandler()
+    EventBus.$on('errors', code => {
+      switch (code) {
+        case 404:
+          this.$router.replace('404Page')
+          break
+        default:
+          this.$router.replace('404Page')
+      }
+    })
   },
-  methods: {
-    initGlobalHandler() {
-      EventBus.$on('errors', code => {
-        switch (code) {
-          case 404:
-            this.$router.replace('404Page')
-            break
-          default:
-            this.$router.replace('404Page')
-        }
-      })
-    },
-  },
-}
+})
 </script>
 
 <style lang="scss" scoped>

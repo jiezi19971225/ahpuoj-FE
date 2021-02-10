@@ -81,7 +81,7 @@ import 'echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legend'
-import { reactive, ref } from '@vue/composition-api'
+import { defineComponent, reactive, ref } from '@vue/composition-api'
 
 import defaultChartOption from './chartOption'
 
@@ -103,7 +103,7 @@ interface UserInfoResponse {
   userinfo: UserInfoDto
 }
 
-export default {
+export default defineComponent({
   name: 'userInfo',
   setup() {
     const route = useRoute()
@@ -160,7 +160,7 @@ export default {
       getAbsoluteUrl,
     }
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>

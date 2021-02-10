@@ -16,3 +16,7 @@ export const downloadDatafile = get(`/datafile`, {
 })
 /** 获取个人信息 */
 export const getUserInfo = id => get(`/user/${id}`)
+/** 重设昵称 */
+export const resetNick = put('/user/nick')
+/** 重设密码 */
+export const resetPassword = put('/user/password')

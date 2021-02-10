@@ -76,12 +76,16 @@
 </template>
 <script lang="ts">
 // eslint-disable-next-line import/extensions
-import { resetNick, resetPassword } from '@user/api/user'
+import * as userApi from '@user/api/userts'
 import { reactive, ref } from '@vue/composition-api'
 import { useDispatch, useMapState, useMessge } from '@common/use'
 import EventBus from '@common/eventbus'
 import { ElForm } from 'element-ui/types/form.d'
 import AvatarUploader from './components/avatar-upload.vue'
+
+interface ResetNickResponse extends BaseResponse {
+  user: User
+}
 
 export default {
   components: { 'oj-avatar-uploader': AvatarUploader },
@@ -194,8 +198,8 @@ export default {
         resetNickLoading.value = true
         if (valid) {
           try {
-            const res = await resetNick(resetNickForm)
-            dispatch('user/UpdateUserInfo', res.data.user)
+            const res = await userApi.resetNick<ResetNickResponse>(resetNickForm)
+            dispatch('user/UpdateUserInfo', res.user)
           } catch (err) {
             console.log(err)
           } finally {
@@ -215,8 +219,7 @@ export default {
         resetPasswordLoading.value = true
         if (valid) {
           try {
-            const res = await resetPassword(resetPasswordForm)
-            dispatch('user/UpdateUserInfo', res.data.user)
+            await userApi.resetPassword<BaseResponse>(resetPasswordForm)
           } catch (err) {
             console.log(err)
           } finally {

@@ -30,43 +30,41 @@
 </template>
 
 <script>
-import TopBar from 'user/components/topbar.vue'
+import { defineComponent, onUnmounted } from '@vue/composition-api'
+import { useDispatch } from 'common/use'
+import { debounce } from 'lodash'
+import TopBar from '@user/components/TopBar/index.vue'
 
 const { body } = document
 const WIDTH = 960
 
-export default {
+export default defineComponent({
   name: 'Layout',
   components: {
-    TopBar,
+    'top-bar': TopBar,
   },
-  data() {
-    return {
-      screenWidth: document.body.clientWidth,
-    }
-  },
-  beforeMount() {
-    window.addEventListener('resize', this.$_resizeHandler)
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.$_resizeHandler)
-  },
-  mounted() {
-    this.$_resizeHandler()
-  },
-  methods: {
-    $_isMobile() {
+  setup() {
+    const dispatch = useDispatch()
+    const getIsMobile = () => {
       const rect = body.getBoundingClientRect()
       return rect.width - 1 < WIDTH
-    },
-    $_resizeHandler() {
+    }
+
+    const resizeHandler = debounce(() => {
       if (!document.hidden) {
-        const isMobile = this.$_isMobile()
-        this.$store.dispatch('app/setDevice', isMobile ? 'mobile' : 'desktop')
+        const isMobile = getIsMobile()
+        dispatch('app/setDevice', isMobile ? 'mobile' : 'desktop')
       }
-    },
+    }, 100)
+
+    resizeHandler()
+    window.addEventListener('resize', resizeHandler)
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', resizeHandler)
+    })
   },
-}
+})
 </script>
 
 <style lang="scss" scoped type="text/css">
