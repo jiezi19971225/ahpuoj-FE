@@ -55,7 +55,7 @@ import { handleExportTableToExcel } from '@common/utils/excel'
 import EventBus from '@common/eventbus'
 import { useRoute } from '@common/use'
 import { onDeactivated, onUnmounted, ref } from '@vue/composition-api'
-import { getAlphabetNumber } from '@common/utils'
+import { getAlphabetNumber, secToTimeStr } from '@common/utils'
 import { problemColumnIOffset } from './constants'
 import { useTableStyle } from './use/useTableStyle'
 
@@ -110,6 +110,7 @@ export default {
       reason,
 
       getAlphabetNumber,
+      secToTimeStr,
       exportExcel,
       calcProblemStatus,
       cellStyle,

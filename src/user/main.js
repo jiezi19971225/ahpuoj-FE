@@ -6,7 +6,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import SvgIcon from 'common/components/svgicon.vue'
 import ECharts from 'vue-echarts'
-import Base from 'common/base'
 import VueCodemirror from 'vue-codemirror'
 import VueCompositionApi from '@vue/composition-api'
 import VueClipboard from 'vue-clipboard2'
@@ -21,7 +20,6 @@ Vue.use(ElementUI)
 Vue.use(VueCompositionApi)
 Vue.use(VueCodemirror)
 Vue.use(VueClipboard)
-Vue.use(Base) // 注册的全局函数
 
 // Vue.config.productionTip = false
 Vue.config.devtools = true
@@ -32,7 +30,6 @@ const requireAll = requireContext => requireContext.keys().map(requireContext)
 const req = require.context('common/assets/icons', false, /\.svg$/)
 requireAll(req)
 
-// echart图标
 Vue.component('v-chart', ECharts)
 
 // eslint-disable-next-line no-new

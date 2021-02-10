@@ -106,7 +106,7 @@
             ></el-table-column>
             <el-table-column label="#" width="60"
               ><template slot-scope="scope"
-                ><span>{{ engNum(scope.$index + 1) }}</span></template
+                ><span>{{ getAlphabetNumber(scope.$index + 1) }}</span></template
               ></el-table-column
             >
             <el-table-column label="标题" min-width="180"
@@ -135,6 +135,7 @@ import EventBus from '@common/eventbus'
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { useLangList, useRoute } from 'common/use'
 import { ContestStatus } from '@common/const/enum'
+import { getAlphabetNumber } from '@common/utils'
 
 interface ContestResponse {
   message: string
@@ -197,6 +198,8 @@ export default defineComponent({
       langList,
       contest,
       timeDiff,
+
+      getAlphabetNumber,
     }
   },
 })

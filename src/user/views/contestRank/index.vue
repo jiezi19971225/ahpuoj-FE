@@ -70,7 +70,7 @@
 import * as nologinApi from 'user/api/nologints'
 import { defineComponent, onDeactivated, onUnmounted, ref } from '@vue/composition-api'
 import { useRoute, useRouter } from '@common/use'
-import { getAlphabetNumber } from '@common/utils'
+import { getAlphabetNumber, secToTimeStr } from '@common/utils'
 import { handleExportTableToExcel } from '@common/utils/excel'
 import EventBus from 'common/eventbus'
 import { problemColumnIOffset } from './constants'
@@ -139,6 +139,7 @@ export default defineComponent({
       seeable,
       reason,
 
+      secToTimeStr,
       calcProblemStatus,
       cellStyle,
       rowStyle,

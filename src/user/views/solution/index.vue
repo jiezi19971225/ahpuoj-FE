@@ -53,7 +53,9 @@
                   params: { id: solution.contest_id, num: solution.num },
                 }"
                 >{{
-                  `C${solution.contest_id}  ${engNum(solution.num)} ${solution.problem_title}`
+                  `C${solution.contest_id}  ${getAlphabetNumber(solution.num)} ${
+                    solution.problem_title
+                  }`
                 }}</router-link
               >
             </p>
@@ -159,7 +161,7 @@ import EventBus from 'common/eventbus'
 import { resultList, langList } from '@common/const'
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
 import { useLoading, useRoute } from '@common/use'
-import { handleDownloadFile, getAbsoluteUrl } from '@common/utils'
+import { handleDownloadFile, getAbsoluteUrl, getAlphabetNumber } from '@common/utils'
 
 interface SolutionMeta {
   compile_info: string
@@ -296,6 +298,7 @@ export default defineComponent({
       renderWrongInfo,
 
       getAbsoluteUrl,
+      getAlphabetNumber,
       handleDownloadDataFile,
       handleToggleSolutionStatus,
     }
