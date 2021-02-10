@@ -1136,10 +1136,10 @@
     string-width "^2.0.0"
     strip-ansi "^5"
 
-"@tinymce/tinymce-vue@3.2.8":
-  version "3.2.8"
-  resolved "https://registry.npm.taobao.org/@tinymce/tinymce-vue/download/@tinymce/tinymce-vue-3.2.8.tgz#014571b52ec8fa83665a7fa887bf65140207de71"
-  integrity sha1-AUVxtS7I+oNmWn+oh79lFAIH3nE=
+"@tinymce/tinymce-vue@3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npm.taobao.org/@tinymce/tinymce-vue/download/@tinymce/tinymce-vue-3.2.0.tgz#abadab7fd6e143688e756df779fc3b81e586427a"
+  integrity sha1-q62rf9bhQ2iOdW33efw7geWGQno=
 
 "@types/babel-types@*", "@types/babel-types@^7.0.0":
   version "7.0.9"
@@ -10788,10 +10788,10 @@ tinycolor2@^1.4.1:
   resolved "https://registry.npm.taobao.org/tinycolor2/download/tinycolor2-1.4.2.tgz#3f6a4d1071ad07676d7fa472e1fac40a719d8803"
   integrity sha1-P2pNEHGtB2dtf6Ry4frECnGdiAM=
 
-tinymce@^5.2.0:
-  version "5.6.2"
-  resolved "https://registry.npm.taobao.org/tinymce/download/tinymce-5.6.2.tgz#4c20c22e328c5d0baab204928dbc2b0ecbed18b4"
-  integrity sha1-TCDCLjKMXQuqsgSSjbwrDsvtGLQ=
+tinymce@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.npm.taobao.org/tinymce/download/tinymce-5.2.0.tgz#e838640f61c8a936317bc27a5d2e16c297df3418"
+  integrity sha1-6DhkD2HIqTYxe8J6XS4WwpffNBg=
 
 tmp@^0.0.33:
   version "0.0.33"
