@@ -320,6 +320,7 @@ export default {
       resultList: Object.freeze(resultList),
       searchableResultList: Object.freeze(searchableResultList),
       langList,
+      contestId,
 
       fetchDataList,
       handleSearch,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="account-setting__img-wrapper">
-      <img class="account-setting__avatar" :src="imgUrl($store.getters.userAvatar)" /><a
+      <img class="account-setting__avatar" :src="getAbsoluteUrl($store.getters.userAvatar)" /><a
         @click="toggleShowAvatarUploader"
       >
         <div class="img-mask">
@@ -30,6 +30,7 @@ import { computed, defineComponent, ref } from '@vue/composition-api'
 import { useDispatch, useMapState, useMessge } from 'common/use'
 // @ts-ignore
 import AvatarUpload from 'vue-image-crop-upload'
+import { getAbsoluteUrl } from '@common/utils'
 
 export default defineComponent({
   components: {
@@ -71,6 +72,7 @@ export default defineComponent({
       showAvatarUploader,
       headers,
 
+      getAbsoluteUrl,
       toggleShowAvatarUploader,
       cropUploadSuccess,
       cropUploadFail,

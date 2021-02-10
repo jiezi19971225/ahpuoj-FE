@@ -334,10 +334,10 @@ export default defineComponent({
     }
 
     const problemTitle = computed(() => {
-      if (route.value.name === 'problem' && problem !== null) {
+      if (route.value.name === 'problem' && problem.value) {
         return `P${problem.value?.id}  ${problem.value?.title}`
       }
-      if (route.value.name === 'contestProblem' && problem != null) {
+      if (route.value.name === 'contestProblem' && problem.value) {
         const num = Number.parseInt(route.value.params.num, 10)
         const alphabetNumber = getAlphabetNumber(num)
         return `C${route.value.params.id}  ${alphabetNumber} ${problem.value?.title}`
