@@ -96,7 +96,6 @@ export default {
     }
 
     const dispatch = useDispatch()
-    const message = useMessge()
     const router = useRouter()
 
     const authDialogVisible = ref(false)
@@ -232,15 +231,10 @@ export default {
     })
 
     const submitLogin = () => {
-      debugger
       loginFormRef.value.validate(async valid => {
         if (valid) {
           try {
             const res = await dispatch('user/Login', loginForm)
-            message({
-              message: res.data.message,
-              type: 'success',
-            })
             authDialogVisible.value = false
             showDropDownMenu.value = false
             dispatch('user/GetUserInfo')
@@ -260,10 +254,6 @@ export default {
           try {
             const res = await dispatch('user/Register', registerForm)
             console.log(res)
-            message({
-              message: res.data.message,
-              type: 'success',
-            })
             authDialogVisible.value = false
             showDropDownMenu.value = false
             dispatch('user/GetUserInfo')

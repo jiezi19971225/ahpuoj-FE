@@ -1,82 +1,83 @@
-<template lang="pug">
-  .content
-    .content__main
-      .one-main
-        h1.content__panel__title 找回密码
-        .steps-wrapper
-          el-steps(:active="active",finish-status="success")
-            el-step(title="确认账号")
-            el-step(title="重设密码")
-        .form-wrapper
-          el-form(ref="form", :model="form", :rules="formRules")
-            el-form-item(prop="email")
-              el-input(v-model="form.email", placeholder="请输入绑定邮箱地址")
-                svg-icon(slot="prefix", name="email", class="auth__input__prefix")
-            el-form-item
-              el-button(type="primary",style="width:100%;",:disabled="submitButtonDisabled",:loading="submitButtonInLoading",@click="sendEmail")   发送确认邮件
+<template>
+  <div class="content">
+    <div class="content__main">
+      <div class="one-main">
+        <h1 class="content__panel__title">找回密码</h1>
+        <div class="steps-wrapper">
+          <el-steps :active="0" finish-status="success">
+            <el-step title="确认账号"></el-step>
+            <el-step title="重设密码"></el-step>
+          </el-steps>
+        </div>
+        <div class="form-wrapper">
+          <el-form ref="formRef" :model="form" :rules="formRules">
+            <el-form-item prop="username">
+              <el-input v-model="form.username" placeholder="请输入用户名"> </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                type="primary"
+                style="width: 100%"
+                :loading="submitButtonInLoading"
+                @click="sendEmail"
+              >
+                发送确认邮件</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
-import { sendFindPassEmail } from 'user/api/auth';
-import { throttle, debounce } from 'throttle-debounce';
+<script lang="ts">
+import * as authApi from '@user/api/authts'
+import { defineComponent, markRaw, reactive, ref } from '@vue/composition-api'
+import { ElForm } from 'element-ui/types/form.d'
 
-export default {
-  data() {
-    return {
-      submitButtonInLoading: false,
-      submitButtonDisabled: false,
-      active: 0,
-      form: {
-        email: '',
-      },
-      formRules: {
-        email: [
-          {
-            required: true,
-            message: '请输入邮箱地址',
-            trigger: 'blur',
-          },
-          {
-            type: 'email',
-            message: '请输入正确的邮箱地址',
-            trigger: 'blur',
-          },
-        ],
-      },
-    };
-  },
-  mounted() {},
-  methods: {
-    sendEmail: debounce(500, function debounced() {
-      this.submitButtonDisabled = true;
-      this.submitButtonInLoading = true;
-      this.$refs.form.validate(async (valid) => {
+export default defineComponent({
+  setup() {
+    const formRef = ref<ElForm>()
+    const submitButtonInLoading = ref(false)
+    const form = reactive({
+      username: '',
+    })
+    const formRules = markRaw({
+      username: [
+        {
+          required: true,
+          message: '请输入用户名',
+          trigger: 'blur',
+        },
+      ],
+    })
+
+    const sendEmail = () => {
+      formRef.value.validate(async valid => {
         if (valid) {
+          submitButtonInLoading.value = true
           try {
-            const res = await sendFindPassEmail(this.form);
-            this.$message({
-              message: res.data.message,
-              type: 'success',
-            });
+            await authApi.sendFindPassEmail<BaseResponse>(form)
           } catch (err) {
-            console.log(err);
-            this.$message({
-              message: err.response.data.message,
-              type: 'error',
-            });
+            console.log(err)
           } finally {
-            this.submitButtonDisabled = false;
-            this.submitButtonInLoading = false;
+            submitButtonInLoading.value = false
           }
-        } else {
-          this.submitButtonDisabled = false;
-          this.submitButtonInLoading = false;
-          return false;
         }
-      });
-    }),
+      })
+    }
+
+    return {
+      formRef,
+      form,
+      formRules,
+      submitButtonInLoading,
+
+      sendEmail,
+    }
   },
-};
+})
 </script>
 
 <style lang="scss" scoped>

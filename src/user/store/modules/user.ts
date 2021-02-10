@@ -1,4 +1,4 @@
-import { login, register } from 'user/api/auth'
+import * as authApi from '@user/api/authts'
 import { getUser } from 'user/api/user'
 import Cookies from 'js-cookie'
 
@@ -36,9 +36,8 @@ const actions = {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await login(loginForm)
+        const res = await authApi.login(loginForm)
         const token = Cookies.get('access-token')
-        const role = 'user'
         commit('SET_TOKEN', token)
         resolve(res)
       } catch (err) {
@@ -50,9 +49,8 @@ const actions = {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await register(registerForm)
+        const res = await authApi.register(registerForm)
         const token = Cookies.get('access-token')
-        const role = 'user'
         commit('SET_TOKEN', token)
         resolve(res)
       } catch (err) {
