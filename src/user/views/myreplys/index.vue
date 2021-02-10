@@ -1,72 +1,78 @@
-<template lang="pug">
-  .content
-    .content__main
-      .one-main.has__pagination
-        h1.content__panel__title 回复列表
-        div(v-if="replys&&replys.length==0")
-          .reply__box
-            p 还没有人回复你
-        div(v-else)
-          template(v-for="(item,index) in replys")
-            .reply__box
-              router-link(:to="{name:'userinfo',params:{id:item?item.user_id:0}}") {{item.username}}
-              span 在帖子
-              router-link(:to="{name:'issue',params:{id:item?item.issue_id:0}}") {{item.issue_title}}
-              span 中回复了你
-              br
-              .reply__content(v-html="calcContent(item.content)")
-        Paginator(@change="fetchDataList",:current-page.sync="currentPage",:page-size.sync="perpage",:total="total")
+<template>
+  <div class="content">
+    <div class="content__main">
+      <div class="one-main has__pagination">
+        <h1 class="content__panel__title">回复列表</h1>
+        <div v-if="replys&amp;&amp;replys.length==0">
+          <div class="reply__box">
+            <p>还没有人回复你</p>
+          </div>
+        </div>
+        <div v-else>
+          <div class="reply__box" v-for="item in replys" :key="item.id">
+            <router-link :to="{ name: 'userinfo', params: { id: item ? item.user_id : 0 } }">{{
+              item.username
+            }}</router-link
+            ><span>在帖子</span>
+            <router-link :to="{ name: 'issue', params: { id: item ? item.issue_id : 0 } }">{{
+              item.issue_title
+            }}</router-link
+            ><span>中回复了你</span><br />
+            <div class="reply__content" v-html="calcContent(item.content)"></div>
+          </div>
+        </div>
+        <oj-paginator
+          @change="fetchDataList"
+          :current-page.sync="page"
+          :page-size.sync="perpage"
+          :total="total"
+        ></oj-paginator>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
-import TinymceEditor from 'common/components/tinymce_editor.vue';
-import EventBus from 'common/eventbus';
-import { getMyReplys } from 'user/api/user';
-import { mapState } from 'vuex';
-import Paginator from 'user/components/Paginator/index.vue';
+<script lang="ts">
+import * as userApi from '@user/api/userts'
+import { usePagination } from '@common/use'
+import { defineComponent, onActivated, ref } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'myreplys',
-  components: {
-    TinymceEditor,
-    Paginator,
-  },
-  data() {
-    return {
-      currentPage: 1,
-      dialogFormVisible: false,
-      perpage: 20,
-      replys: [],
-      total: 0,
-    };
-  },
-  mounted() {
-    this.fetchDataList();
-  },
-  methods: {
-    async fetchDataList(resetScroll) {
-      if (resetScroll !== false) {
-        window.pageYOffset = 0;
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-      }
+  setup() {
+    const pagination = usePagination()
+    const replys = ref<ReplyInfoDto[]>([])
+
+    const fetchDataList = async () => {
       try {
-        const res = await getMyReplys({
-          page: this.currentPage,
-          perpage: this.perpage,
-        });
-        const { data } = res;
-        this.replys = data.replys;
-        this.total = data.total;
+        const res = await userApi.getMyReplys<MyReplysResponse>({
+          page: pagination.page,
+          perpage: pagination.perpage,
+        })
+        replys.value = res.replys
+        pagination.total.value = res.total
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
-    },
-    calcContent(content) {
-      return content.length <= 100 ? content : `${content.substr(0, 100)}...`;
-    },
+    }
+
+    const calcContent = content => {
+      return content.length <= 100 ? content : `${content.substr(0, 100)}...`
+    }
+
+    onActivated(() => {
+      fetchDataList()
+    })
+
+    return {
+      ...pagination,
+      replys,
+
+      fetchDataList,
+      calcContent,
+    }
   },
-};
+})
 </script>
 
 <style lang="scss" scoped>

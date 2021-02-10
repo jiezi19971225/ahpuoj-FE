@@ -1,5 +1,5 @@
 import * as authApi from '@user/api/authts'
-import { getUser } from 'user/api/user'
+import * as userApi from '@user/api/userts'
 import Cookies from 'js-cookie'
 
 const initState = {
@@ -67,8 +67,8 @@ const actions = {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await getUser()
-        const { user } = res.data
+        const res = await userApi.getUser<any>()
+        const { user } = res
         commit('SET_USER', user)
         resolve(res)
       } catch (err) {

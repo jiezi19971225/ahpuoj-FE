@@ -1,5 +1,7 @@
 import { get, post, put } from '@common/axios/request'
 
+/**    */
+export const getUser = get('/user')
 /** 获取最新递交的源码 */
 export const getLatestSource = id => get(`/problem/${id}/latestsource`)
 /** 获取最近提交的比赛源码 */
@@ -24,3 +26,5 @@ export const resetPassword = put('/user/password')
 export const postIssue = post('/issue')
 /** 发表回复 */
 export const replyToIssue = id => post(`/issue/${id}/reply`)
+/** 获取我的回复列表 */
+export const getMyReplys = get(`/myreplys`)

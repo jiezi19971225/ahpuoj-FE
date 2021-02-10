@@ -152,6 +152,7 @@ export default [
         path: 'myreplys',
         name: 'myreplys',
         meta: {
+          keepAlive: true,
           title: '查看回复 - AHPUOJ',
         },
         component: () => import('../views/myreplys'),

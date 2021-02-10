@@ -21,8 +21,7 @@ router.beforeEach(async (to, from, next) => {
     console.log('have token')
     if (store.getters.username.length === 0) {
       try {
-        const res = await store.dispatch('user/GetUserInfo') // 拉取用户信息
-        const data = res.data.user
+        await store.dispatch('user/GetUserInfo') // 拉取用户信息
         console.log('get user info')
         next()
       } catch (err) {

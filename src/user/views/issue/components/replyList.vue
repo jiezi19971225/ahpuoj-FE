@@ -54,7 +54,7 @@
                 <ul>
                   <li class="reply__user__avatar">
                     <router-link :to="{ name: 'userinfo', params: { id: subitem.user_id } }"
-                      ><img :src="imgUrl(subitem.avatar)"
+                      ><img :src="getAbsoluteUrl(subitem.avatar)"
                     /></router-link>
                   </li>
                   <li class="reply__user__name ell">
