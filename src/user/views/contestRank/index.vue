@@ -60,7 +60,7 @@
             >
           </template>
         </el-table>
-        <p>{{ reason }}</p>
+        <p v-else>{{ reason }}</p>
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@ export default defineComponent({
 
     const { calcFirstBloods, calcProblemStatus, cellStyle, rowStyle } = useTableStyle(dataList)
 
-    const fetctContestRankList = async () => {
+    const fetchDataList = async () => {
       tableLoading.value = true
       try {
         const res = await nologinApi.getContestRankList(
@@ -108,10 +108,10 @@ export default defineComponent({
       }
     }
 
-    fetctContestRankList()
+    fetchDataList()
     // 每隔1分钟拉取一次数据
     const timer = setInterval(() => {
-      fetctContestRankList()
+      fetchDataList()
     }, 60000)
     onDeactivated(() => {
       clearInterval(timer)

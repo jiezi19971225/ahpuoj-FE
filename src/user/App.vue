@@ -12,6 +12,7 @@ import '@user/styles/main.scss'
 import EventBus from '@common/eventbus'
 import AuthForm from '@user/components/AuthForm/index.vue'
 import { defineComponent } from '@vue/composition-api'
+import { useRouter } from 'common/use'
 
 export default defineComponent({
   name: 'App',
@@ -19,14 +20,15 @@ export default defineComponent({
     'auth-form': AuthForm,
   },
   setup() {
+    const router = useRouter()
     document.body.removeChild(document.getElementById('Loading'))
     EventBus.$on('errors', code => {
       switch (code) {
         case 404:
-          this.$router.replace('404Page')
+          router.replace('/404Page')
           break
         default:
-          this.$router.replace('404Page')
+          router.replace('/404Page')
       }
     })
   },
