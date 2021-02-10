@@ -6,6 +6,10 @@ export const useStore = () => {
   return vm.$store
 }
 
+export const useDispatch = () => {
+  return useStore().dispatch
+}
+
 /**
  * 暂时只支持对象形式
  * 返回被 reactive 包裹的对象

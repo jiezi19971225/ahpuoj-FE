@@ -1,75 +1,95 @@
-<template lang="pug">
-  .content
-    .content__main
-      .one-main.has__pagination
-        el-table(size="small",:data="tableData",v-loading="tableLoading")
-          el-table-column(label="排名", width="60")
-            template(slot-scope="scope")
-              span {{ (currentPage-1) * 50 + scope.$index + 1}}
-          el-table-column(label="用户",width="70")
-            template(slot-scope="scope")
-                router-link(:to="{name:'userinfo',params:{id:scope.row.id}}")
-                  .user__avatar__wrapper
-                    img(:src="imgUrl(scope.row.avatar)",class="user__avatar")
-          el-table-column
-            template(slot-scope="scope")
-              router-link(:to="{name:'userinfo',params:{id:scope.row.id}}")
-                span {{`${scope.row.nick}`}}
-          el-table-column(label="通过率", width="80")
-            template(slot-scope="scope") {{calcRate(scope.row)}}
-          el-table-column(label="解决",width="70",prop="solved")
-          el-table-column(label="提交",width="70",prop="submit")
-
-        Paginator(@change="fetchDataList",:current-page.sync="currentPage",:page-size.sync="perpage",:total="total")
+<template>
+  <div class="content">
+    <div class="content__main">
+      <div class="one-main has__pagination">
+        <el-table size="small" :data="dataList" v-loading="tableLoading">
+          <el-table-column label="排名" width="60"
+            ><template slot-scope="scope"
+              ><span>{{ (page - 1) * 50 + scope.$index + 1 }}</span></template
+            ></el-table-column
+          >
+          <el-table-column label="用户" width="70"
+            ><template slot-scope="scope">
+              <router-link :to="{ name: 'userinfo', params: { id: scope.row.id } }">
+                <div class="user__avatar__wrapper">
+                  <img class="user__avatar" :src="getAbsoluteUrl(scope.row.avatar)" />
+                </div>
+              </router-link> </template
+          ></el-table-column>
+          <el-table-column
+            ><template slot-scope="scope">
+              <router-link :to="{ name: 'userinfo', params: { id: scope.row.id } }"
+                ><span>{{ `${scope.row.nick}` }}</span></router-link
+              >
+            </template></el-table-column
+          >
+          <el-table-column label="通过率" width="80"
+            ><template slot-scope="scope">{{ calcRate(scope.row) }}</template></el-table-column
+          >
+          <el-table-column label="解决" width="70" prop="solved"></el-table-column>
+          <el-table-column label="提交" width="70" prop="submit"></el-table-column>
+        </el-table>
+        <oj-paginator
+          @change="fetchDataList"
+          :current-page.sync="page"
+          :page-size.sync="perpage"
+          :total="total"
+        ></oj-paginator>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
-import { getRankList } from 'user/api/nologin';
-import { setTimeout } from 'timers';
-import { mapState } from 'vuex';
-import Paginator from 'user/components/Paginator/index.vue';
+<script lang="ts">
+import * as nologinApi from '@user/api/nologints'
+import { usePagination } from 'common/use'
+import { onActivated, ref } from '@vue/composition-api'
+import { getAbsoluteUrl } from '@common/utils'
 
 export default {
   name: 'ranklist',
-  components: { Paginator },
-  data() {
-    return {
-      tableLoading: false,
-      currentPage: 1,
+  setup() {
+    const pagination = usePagination({
       perpage: 50,
-      problemId: 0,
-      tableData: [],
-      total: 0,
-    };
-  },
-  mounted() {
-    this.fetchDataList();
-  },
-  methods: {
-    test(row) {
-      console.log(row);
-    },
-    async fetchDataList() {
-      this.tableLoading = true;
+    })
+    const dataList = ref<User[]>()
+    const tableLoading = ref(false)
+
+    const fetchDataList = async () => {
+      tableLoading.value = true
       try {
-        const res = await getRankList({
-          page: this.currentPage,
-          perpage: this.perpage,
-        });
-        const { data } = res;
-        this.tableData = data.data;
-        this.total = data.total;
-        this.tableLoading = false;
+        const res = await nologinApi.getRankList<CommonPaginationResponse<User[]>>({
+          page: pagination.page,
+          perpage: pagination.perpage,
+        })
+        dataList.value = res.data
+        pagination.total.value = res.total
       } catch (err) {
-        console.log(err);
+        console.log(err)
+      } finally {
+        tableLoading.value = false
       }
-    },
-    calcRate(row) {
-      const rate = row.submit === 0 ? 0 : row.solved / row.submit;
-      return `${Number(rate * 100).toFixed(2)}%`;
-    },
+    }
+
+    onActivated(() => {
+      fetchDataList()
+    })
+
+    const calcRate = row => {
+      const rate = row.submit === 0 ? 0 : row.solved / row.submit
+      return `${Number(rate * 100).toFixed(2)}%`
+    }
+    return {
+      ...pagination,
+      dataList,
+      tableLoading,
+
+      fetchDataList,
+      calcRate,
+      getAbsoluteUrl,
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

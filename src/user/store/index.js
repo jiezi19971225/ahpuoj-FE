@@ -1,10 +1,10 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import user from './modules/user';
-import app from './modules/app';
-import getters from './getters';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import user from './modules/user'
+import app from './modules/app'
+import getters from './getters'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     user,
@@ -12,4 +12,4 @@ export default new Vuex.Store({
   },
   getters,
   strict: process.env.NODE_ENV !== 'production',
-});
+})

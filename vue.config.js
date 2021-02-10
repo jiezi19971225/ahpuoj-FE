@@ -88,7 +88,7 @@ module.exports = {
     return {
       resolve: {
         // 引入路径是不用写对应的后缀名
-        extensions: ['.js', '.vue', '.json'],
+        extensions: ['.js', '.ts', '.vue', '.json'],
         alias: {
           '@': path.resolve(__dirname, 'src'),
           user: path.resolve(__dirname, 'src/user'),

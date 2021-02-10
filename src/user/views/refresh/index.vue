@@ -2,11 +2,13 @@
   <div></div>
 </template>
 <script>
-export default {
+import { defineComponent } from '@vue/composition-api'
+
+export default defineComponent({
   beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.$router.replace(from.path);
-    });
+    next(vm => {
+      vm.$router.replace(from.path)
+    })
   },
-};
+})
 </script>

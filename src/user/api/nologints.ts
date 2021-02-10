@@ -20,3 +20,5 @@ export const getSolution = id => get(`/solution/${id}`)
 export const getContestList = get(`/contests`)
 /** 获取竞赛作业详情 */
 export const getContest = id => get(`/contest/${id}`)
+/** 获取排名列表 */
+export const getRankList = get(`/ranklist`)

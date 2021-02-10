@@ -1,111 +1,166 @@
-<template lang="pug">
-  .content
-    title {{user?`${user.nick}的个人空间`:''}}
-    .content__main
-      .one-main
-        h1.content__panel__title 个人空间
-        .main__section
-          h3 用户信息
-          el-row.tac
-            el-col(:span="12")
-              .userinfo__avatart__wrapper
-                img(:src="imgUrl(user?user.avatar:'')")
-            el-col(:span="12")
-              ul.infolist
-                li
-                  span 昵称
-                  span(v-if="user") {{user.nick}}
-                li
-                  span 解决
-                  a(v-if="user",@click="jumpToSolved") {{user.solved}}
-                li
-                  span 提交
-                  a(v-if="user",@click="jumpToSubmit") {{user.submit}}
-                li
-                  span 排名
-                  span(v-if="user") {{user.rank}}
-                li
-                  span 注册时间
-                  span(v-if="user") {{user.created_at}}
-        .main__section
-          h3 近期提交情况
-          v-chart(style="width:100%;height:5rem;",ref="chart",:options="chartOption",autoresize)
-        .main__section
-          h3 已解决的问题
-          .problem__links(v-if="user")
-            template(v-for="item,index in user.solved_problem_list")
-              router-link(:to="{name:'problem',params:{id:item}}")
-                el-button(type="success",size="mini") {{item}}
-        .main__section
-          h3 未解决的问题
-          .problem__links(v-if="user")
-            template(v-for="item,index in user.unsolved_problem_list")
-              router-link(:to="{name:'problem',params:{id:item}}")
-                el-button(type="danger",size="mini") {{item}}
+<template>
+  <div class="content">
+    <title>{{ user ? `${user.nick}的个人空间` : '' }}</title>
+    <div class="content__main">
+      <div class="one-main">
+        <h1 class="content__panel__title">个人空间</h1>
+        <div class="main__section">
+          <h3>用户信息</h3>
+          <el-row class="tac">
+            <el-col :span="12">
+              <div class="userinfo__avatart__wrapper">
+                <img :src="getAbsoluteUrl(user ? user.avatar : '')" />
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <ul class="infolist">
+                <li>
+                  <span>昵称</span><span v-if="user">{{ user.nick }}</span>
+                </li>
+                <li>
+                  <span>解决</span><a v-if="user" @click="jumpToSolved">{{ user.solved }}</a>
+                </li>
+                <li>
+                  <span>提交</span><a v-if="user" @click="jumpToSubmit">{{ user.submit }}</a>
+                </li>
+                <li>
+                  <span>排名</span><span v-if="user">{{ user.rank }}</span>
+                </li>
+                <li>
+                  <span>注册时间</span><span v-if="user">{{ user.created_at }}</span>
+                </li>
+              </ul>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="main__section">
+          <h3>近期提交情况</h3>
+          <v-chart
+            style="width: 100%; height: 5rem"
+            ref="chart"
+            :options="chartOption"
+            autoresize="autoresize"
+          ></v-chart>
+        </div>
+        <div class="main__section">
+          <h3>已解决的问题</h3>
+          <div class="problem__links" v-if="user">
+            <router-link
+              :to="{ name: 'problem', params: { id: item } }"
+              v-for="item in user.solved_problem_list"
+              :key="item"
+            >
+              <el-button type="success" size="mini">{{ item }}</el-button>
+            </router-link>
+          </div>
+        </div>
+        <div class="main__section">
+          <h3>未解决的问题</h3>
+          <div class="problem__links" v-if="user">
+            <router-link
+              :to="{ name: 'problem', params: { id: item } }"
+              v-for="item in user.unsolved_problem_list"
+              :key="item"
+            >
+              <el-button type="danger" size="mini">{{ item }}</el-button>
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
-import { getUserInfo } from 'user/api/user';
-import 'echarts';
-import chartOption from './chartOption';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
+<script lang="ts">
+/* eslint-disable camelcase */
+import * as userApi from '@user/api/userts'
+import { getAbsoluteUrl } from '@common/utils'
+import { useRoute, useRouter } from '@common/use'
+
+import 'echarts'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/legend'
+import { reactive, ref } from '@vue/composition-api'
+
+import defaultChartOption from './chartOption'
+
+interface StatisticUnit {
+  date: string
+  count: number
+}
+
+interface UserInfoDto extends User {
+  rank: number
+  solved_problem_list: number[]
+  unsolved_problem_list: number[]
+  recent_solved_statistic: StatisticUnit[]
+  recent_submit_statistic: StatisticUnit[]
+}
+
+interface UserInfoResponse {
+  message: string
+  userinfo: UserInfoDto
+}
 
 export default {
   name: 'userInfo',
-  data() {
-    return {
-      user: null,
-      chartData: [],
-      renderFlag: false,
-      chartOption,
-    };
-  },
+  setup() {
+    const route = useRoute()
+    const router = useRouter()
 
-  mounted() {
-    this.init();
-  },
-  methods: {
-    async init() {
-      try {
-        const { id } = this.$route.params;
-        const res = await getUserInfo(id);
-        const { data } = res;
-        this.user = data.userinfo;
-        this.renderFlag = true;
-        this.chartOption.series[0].data = this.user.recent_solved_statistic.map((x) => x.count);
-        this.chartOption.series[1].data = this.user.recent_submit_statistic.map((x) => x.count);
-        this.chartOption.xAxis.data = this.user.recent_solved_statistic.map((x) => x.date);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    jumpToSolved() {
-      this.$router.push({
+    const user = ref<UserInfoDto>()
+    const chartOption = reactive(defaultChartOption)
+
+    try {
+      const { id } = route.value.params
+      userApi
+        .getUserInfo(id)<UserInfoResponse>()
+        .then(res => {
+          user.value = res.userinfo
+          chartOption.series[0].data = user.value.recent_solved_statistic.map(x => x.count)
+          chartOption.series[1].data = user.value.recent_submit_statistic.map(x => x.count)
+          chartOption.xAxis.data = user.value.recent_solved_statistic.map(x => x.date)
+        })
+    } catch (err) {
+      console.log(err)
+    }
+
+    const jumpToSolved = () => {
+      router.push({
         name: 'status',
         params: {
-          id: this.$route.params.id,
+          id: route.value.params.id.toString(),
         },
         query: {
-          result: 4,
-          nick: this.user.nick,
+          result: '4',
+          nick: user.value.nick,
         },
-      });
-    },
-    jumpToSubmit() {
-      this.$router.push({
+      })
+    }
+
+    const jumpToSubmit = () => {
+      router.push({
         name: 'status',
         params: {
-          id: this.$route.params.id,
+          id: route.value.params.id,
         },
         query: {
-          nick: this.user.nick,
+          nick: user.value.nick,
         },
-      });
-    },
+      })
+    }
+
+    return {
+      user,
+      chartOption,
+
+      jumpToSolved,
+      jumpToSubmit,
+      getAbsoluteUrl,
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -139,11 +194,11 @@ ul.infolist {
   padding-top: 10px;
   display: flex;
   flex-wrap: wrap;
-  >*{
-    margin-right: .2rem;
-    margin-bottom: .1rem;
+  > * {
+    margin-right: 0.2rem;
+    margin-bottom: 0.1rem;
   }
-  .el-button{
+  .el-button {
     width: 50px;
   }
 }

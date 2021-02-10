@@ -11,7 +11,7 @@
             <div>
               <router-link
                 :to="{ name: 'userinfo', params: { id: solution ? solution.user_id : 0 } }"
-                ><img :src="imgUrl(solution ? solution.avatar : '')"
+                ><img :src="getAbsoluteUrl(solution ? solution.avatar : '')"
               /></router-link>
             </div>
             <div>
@@ -159,7 +159,7 @@ import EventBus from 'common/eventbus'
 import { resultList, langList } from '@common/const'
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
 import { useLoading, useRoute } from '@common/use'
-import { handleDownloadFile } from 'common/utils'
+import { handleDownloadFile, getAbsoluteUrl } from '@common/utils'
 
 interface SolutionMeta {
   compile_info: string
@@ -295,6 +295,7 @@ export default defineComponent({
       wrongFileName,
       renderWrongInfo,
 
+      getAbsoluteUrl,
       handleDownloadDataFile,
       handleToggleSolutionStatus,
     }

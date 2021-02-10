@@ -14,3 +14,5 @@ export const toggleSolutionStatus = id => put(`/solution/${id}/status`)
 export const downloadDatafile = get(`/datafile`, {
   responseType: 'blob',
 })
+/** 获取个人信息 */
+export const getUserInfo = id => get(`/user/${id}`)
