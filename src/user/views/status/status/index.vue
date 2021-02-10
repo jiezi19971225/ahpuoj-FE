@@ -21,7 +21,7 @@
                 style="max-width: 20em"
                 :placeholder="!isContest ? '请输入问题名/ID' : '请输入题号(如A)'"
                 @keyup.enter.native="handleSearch"
-                v-model="queryParams.queryParam"
+                v-model="queryParams.param"
                 maxlength="20"
                 clearable="clearable"
               >
@@ -212,8 +212,8 @@ export default {
   },
   setup(props) {
     const defaultQuery = {
-      queryParam: '',
-      nick: '',
+      param: '',
+      username: '',
       language: '',
       result: '',
     }
@@ -241,10 +241,7 @@ export default {
           contest_id: contestId.value,
           page: pagination.page,
           perpage: pagination.perpage,
-          param: queryParams.queryParam,
-          username: queryParams.nick,
-          language: queryParams.language,
-          result: queryParams.result,
+          ...queryParams,
         })
         dataList.value = res.data
         pagination.total.value = res.total
@@ -307,7 +304,7 @@ export default {
     }
 
     const handleSearchMyRecord = () => {
-      queryParams.nick = states.user.nick
+      queryParams.username = states.user.nick
       handleSearch()
     }
 

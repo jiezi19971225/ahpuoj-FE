@@ -128,6 +128,19 @@ export declare global {
     teams: Team[]
   }
 
+  declare interface Series {
+    id: number
+    name: string
+    description: string
+    team_mode: number
+    defunct: number
+    created_at: string
+    updated_at: string
+    is_deleted: string
+    creator_id: number
+    contests: Contest[]
+  }
+
   declare interface ContestDto extends Contest, CreatorInfo {}
 
   declare interface Reply {

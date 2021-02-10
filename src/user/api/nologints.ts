@@ -30,3 +30,7 @@ export const getContestTeamRankList = id => get(`contest/${id}/teamranklist`)
 export const getIssue = id => get(`/issue/${id}`)
 /** 获取话题列表 */
 export const getIssueList = pid => get(`/problem/${pid}/issues`)
+/** 获取系列赛 */
+export const getSeries = id => get(`/series/${id}`)
+/** 获取系列赛列表 */
+export const getSeriesList = get(`serieses`)

@@ -14,7 +14,7 @@
                 style="max-width: 20em"
                 placeholder="请输入问题名或ID"
                 @keyup.enter.native="handleSearch"
-                v-model="queryParams.queryParam"
+                v-model="queryParams.param"
                 maxlength="20"
                 clearable="clearable"
               >
@@ -164,7 +164,7 @@ export default defineComponent({
   name: 'problemSet',
   setup() {
     const defaultQuery = {
-      queryParam: '',
+      param: '',
       tagId: '',
       level: '',
     }
@@ -194,9 +194,7 @@ export default defineComponent({
         const res = await nologinApi.getProblemList<CommonPaginationResponse<ProblemListItem[]>>({
           page: pagination.page,
           perpage: pagination.perpage,
-          tag_id: queryParams.tagId,
-          level: queryParams.level,
-          param: queryParams.queryParam,
+          ...queryParams,
         })
         dataList.value = res.data
         pagination.total.value = res.total

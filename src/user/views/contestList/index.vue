@@ -12,7 +12,7 @@
                   style="max-width: 20em"
                   placeholder="请输入竞赛名称"
                   @keyup.enter.native="handleSearch"
-                  v-model="queryParams.queryParam"
+                  v-model="queryParams.param"
                   maxlength="20"
                   clearable="clearable"
                 >
@@ -85,7 +85,7 @@ export default defineComponent({
   name: 'contestList',
   setup() {
     const defaultQuery = {
-      queryParam: '',
+      param: '',
     }
     const { query, queryParams } = useQuery(defaultQuery)
     const router = useRouter()
@@ -100,7 +100,7 @@ export default defineComponent({
         const res = await nologinApi.getContestList<CommonPaginationResponse<ContestDto[]>>({
           page: pagination.page,
           perpage: pagination.perpage,
-          param: queryParams.queryParam,
+          ...queryParams,
         })
         dataList.value = res.data
         pagination.total.value = res.total
