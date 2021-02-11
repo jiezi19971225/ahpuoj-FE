@@ -1,4 +1,4 @@
-const layout = () => import('../layout/index.vue');
+const layout = () => import('../layout/index.vue')
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -348,7 +348,7 @@ export default [
           title: '404',
           noCache: true,
         },
-        component: () => import('../views/404'),
+        component: () => import('../views/errors/404'),
       },
       {
         path: '',
@@ -357,8 +357,8 @@ export default [
           title: '404',
           noCache: true,
         },
-        component: () => import('../views/404'),
+        component: () => import('../views/errors/404'),
       },
     ],
   },
-];
+]

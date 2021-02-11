@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="content-header" v-if="$slots.header">
+      <slot name="header"></slot>
+    </div>
     <div class="content__toolbar__wrapper">
       <div class="tool">
         <slot name="table-tool" :queryParams="queryParams" :handleSearch="handleSearch"></slot>
@@ -46,9 +49,13 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    totalSync: {
+      type: Number,
+      default: 0,
+    },
   },
   name: 'OjDataTable',
-  setup(props) {
+  setup(props, { emit }) {
     console.log('setup')
 
     const router = useRouter()
@@ -66,6 +73,7 @@ export default defineComponent({
       // @ts-ignore
       const res = await props.fetchFn(params)
       pagination.total.value = res.total
+      emit('update:totalSync', res.total)
       tableLoading.value = false
     }
 
