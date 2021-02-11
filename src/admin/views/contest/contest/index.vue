@@ -1,31 +1,83 @@
-<template lang="pug">
-.admin-content
-  .content__main
-    el-form(:model="form", :rules="rules", ref="form", label-width="6em")
-      el-form-item(label="名称", prop="name")
-        el-input(placeholder="请输入名称",v-model="form.name",:autofocus="true")
-      el-form-item(label="开始时间", prop="start_time" required)
-        el-date-picker(v-model="form.start_time", type="datetime", format="yyyy-MM-dd HH:mm:ss",value-format="yyyy-MM-dd HH:mm:ss", placeholder="选择开始时间", style="width:100%")
-      el-form-item(label="结束时间", prop="end_time" required)
-        el-date-picker(v-model="form.end_time", type="datetime", format="yyyy-MM-dd HH:mm:ss",value-format="yyyy-MM-dd HH:mm:ss", placeholder="选择结束时间", style="width:100%")
-      el-form-item(label="题目编号")
-        el-input(placeholder="使用 , 半角逗号 分隔题目ID列表，格式如:1000,1001,1002",v-model="form.problems",:autofocus="true")
-      el-form-item(label="简介")
-        tinymce-editor(v-model="form.description",:height="300")
-      el-form-item(label="公开度")
-        el-switch(v-model="form.private", active-text="私有", inactive-text="公开", inactive-color="#99cc33", :active-value="1", :inactive-value="0")
-      el-form-item(label="团队模式")
-        el-switch(v-model="form.team_mode", active-text="团队", inactive-text="个人", inactive-color="#99cc33", :active-value="1", :inactive-value="0",@change="notifyModeChange")
-      el-form-item(label="语言")
-        el-checkbox-group(v-model="selectedLangList", @change="calcMask")
-          el-checkbox(v-for="item,index in langList",:key="item.name", :label="item.name", :disabled="!item.available" :checked="(form.langmask & (1<<index))>0")
-      el-form-item(class="fl")
-        el-button(type="primary",@click="submit") 提交
+<template>
+  <div class="admin-content">
+    <div class="content__main">
+      <el-form :model="form" :rules="rules" ref="form" label-width="6em">
+        <el-form-item label="名称" prop="name">
+          <el-input placeholder="请输入名称" v-model="form.name" :autofocus="true"></el-input>
+        </el-form-item>
+        <el-form-item label="开始时间" prop="start_time" required="required">
+          <el-date-picker
+            v-model="form.start_time"
+            type="datetime"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择开始时间"
+            style="width: 100%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束时间" prop="end_time" required="required">
+          <el-date-picker
+            v-model="form.end_time"
+            type="datetime"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择结束时间"
+            style="width: 100%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="题目编号">
+          <el-input
+            placeholder="使用 , 半角逗号 分隔题目ID列表，格式如:1000,1001,1002"
+            v-model="form.problems"
+            :autofocus="true"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="简介">
+          <tinymce-editor v-model="form.description" :height="300"></tinymce-editor>
+        </el-form-item>
+        <el-form-item label="公开度">
+          <el-switch
+            v-model="form.private"
+            active-text="私有"
+            inactive-text="公开"
+            inactive-color="#99cc33"
+            :active-value="1"
+            :inactive-value="0"
+          ></el-switch>
+        </el-form-item>
+        <el-form-item label="团队模式">
+          <el-switch
+            v-model="form.team_mode"
+            active-text="团队"
+            inactive-text="个人"
+            inactive-color="#99cc33"
+            :active-value="1"
+            :inactive-value="0"
+            @change="notifyModeChange"
+          ></el-switch>
+        </el-form-item>
+        <el-form-item label="语言">
+          <el-checkbox-group v-model="selectedLangList" @change="calcMask">
+            <el-checkbox
+              v-for="(item, index) in langList"
+              :key="item.name"
+              :label="item.name"
+              :disabled="!item.available"
+              :checked="(form.langmask &amp; (1&lt;&lt;index))&gt;0"
+            ></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item class="fl">
+          <el-button type="primary" @click="submit">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>
 import TinymceEditor from 'common/components/tinymce_editor.vue'
-import { createContest, editContest, getContest } from 'admin/api/contest'
+import * as contestApi from '@admin/api/contestts'
 import { getLanguageList } from 'user/api/nologin'
 
 export default {
@@ -138,9 +190,9 @@ export default {
       if (this.$route.name === 'adminEditContest') {
         try {
           const { id } = this.$route.params
-          const res = await getContest(id)
+          const res = await contestApi.getContest(id)()
           if (!this.inited) {
-            this.form = res.data.contest
+            this.form = res.contest
           }
           this.inited = true
           this.$notify({
@@ -176,10 +228,10 @@ export default {
         if (valid) {
           try {
             if (this.$route.name === 'adminAddContest') {
-              await createContest(this.form)
+              await contestApi.createContest(this.form)
             } else {
               const { id } = this.$route.params
-              await editContest(id, this.form)
+              await contestApi.editContest(id)(this.form)
             }
             this.$store.dispatch('tagsView/delViewByRoute', this.$route)
             this.$router.push({ name: 'adminContestList' })
@@ -219,5 +271,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped></style>

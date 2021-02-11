@@ -14,7 +14,7 @@ const cache = setupCache({
 const instance = axios.create({
   adapter: cache.adapter,
 })
-const timeFields = ['created_at', 'updated_at']
+const timeFields = ['created_at', 'updated_at', 'start_time', 'end_time']
 
 instance.interceptors.request.use(
   config => {
