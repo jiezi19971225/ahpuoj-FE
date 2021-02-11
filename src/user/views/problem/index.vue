@@ -202,7 +202,6 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'vuex'
 import CodeMirror from '@common/components/codemirror.vue'
 import { testRunInterval } from 'common/const'
 import * as nologinApi from '@user/api/nologints'

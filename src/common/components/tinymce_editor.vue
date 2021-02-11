@@ -1,6 +1,13 @@
-<template lang="pug">
-    .tinymce-editor(:style="{ height : height + 'px'}")
-      editor(v-model="myValue", :init="init", :disabled="disabled", @onClick="onClick",:key="tinymceKey")
+<template>
+  <div class="tinymce-editor" :style="{ height: height + 'px' }">
+    <editor
+      v-model="myValue"
+      :init="init"
+      :disabled="disabled"
+      @onClick="onClick"
+      :key="tinymceKey"
+    ></editor>
+  </div>
 </template>
 
 <script>

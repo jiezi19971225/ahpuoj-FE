@@ -7,13 +7,6 @@ module.exports = {
   lintOnSave: false,
   productionSourceMap: false,
   chainWebpack: config => {
-    config.module
-      .rule('pug')
-      .test(/\.pug$/)
-      .use('pug-html-loader')
-      .loader('pug-html-loader')
-      .end()
-
     const svgRule = config.module.rule('svg')
     // 清除已有的所有 loader。
     // 如果你不这样做，接下来的 loader 会附加在该规则现有的 loader 之后。

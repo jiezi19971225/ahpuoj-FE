@@ -39,12 +39,10 @@
 <script lang="tsx">
 import * as nologinApi from '@user/api/nologints'
 import { usePagination } from '@common/use'
-import Paginator from '@user/components/Paginator/index.vue'
 import { ref, onMounted, defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'home',
-  components: { Paginator },
   setup() {
     const pagination = usePagination({
       perpage: 5,

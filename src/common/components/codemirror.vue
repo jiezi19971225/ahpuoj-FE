@@ -1,44 +1,49 @@
-<template lang="pug">
-  codemirror(v-model="mycode", :options="cmOptions", @input="onCmCodeChange",style="height:100%;")
+<template>
+  <codemirror
+    v-model="mycode"
+    :options="cmOptions"
+    @input="onCmCodeChange"
+    style="height: 100%"
+  ></codemirror>
 </template>
 
 <script>
 // language
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/go/go';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/clike/clike'
+import 'codemirror/mode/go/go'
+import 'codemirror/mode/python/python'
+import 'codemirror/mode/javascript/javascript'
 // theme css
-import 'codemirror/theme/monokai.css';
+import 'codemirror/theme/monokai.css'
 // auto close brackets
-import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/edit/closebrackets'
 // require active-line
-import 'codemirror/addon/selection/active-line';
+import 'codemirror/addon/selection/active-line'
 // styleSelectedText
-import 'codemirror/addon/selection/mark-selection';
-import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/selection/mark-selection'
+import 'codemirror/addon/search/searchcursor'
 // highlightSelectionMatches
-import 'codemirror/addon/scroll/annotatescrollbar';
-import 'codemirror/addon/search/matchesonscrollbar';
+import 'codemirror/addon/scroll/annotatescrollbar'
+import 'codemirror/addon/search/matchesonscrollbar'
 
-import 'codemirror/addon/search/match-highlighter';
+import 'codemirror/addon/search/match-highlighter'
 // keyMap
-import 'codemirror/addon/edit/matchbrackets';
-import 'codemirror/addon/comment/comment';
-import 'codemirror/addon/dialog/dialog';
-import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/edit/matchbrackets'
+import 'codemirror/addon/comment/comment'
+import 'codemirror/addon/dialog/dialog'
+import 'codemirror/addon/dialog/dialog.css'
 
-import 'codemirror/addon/search/search';
-import 'codemirror/keymap/sublime';
+import 'codemirror/addon/search/search'
+import 'codemirror/keymap/sublime'
 // foldGutter
-import 'codemirror/addon/fold/foldgutter.css';
-import 'codemirror/addon/fold/brace-fold';
-import 'codemirror/addon/fold/comment-fold';
-import 'codemirror/addon/fold/foldcode';
-import 'codemirror/addon/fold/foldgutter';
-import 'codemirror/addon/fold/indent-fold';
-import 'codemirror/addon/fold/markdown-fold';
-import 'codemirror/addon/fold/xml-fold';
+import 'codemirror/addon/fold/foldgutter.css'
+import 'codemirror/addon/fold/brace-fold'
+import 'codemirror/addon/fold/comment-fold'
+import 'codemirror/addon/fold/foldcode'
+import 'codemirror/addon/fold/foldgutter'
+import 'codemirror/addon/fold/indent-fold'
+import 'codemirror/addon/fold/markdown-fold'
+import 'codemirror/addon/fold/xml-fold'
 
 // hint
 // import 'codemirror/addon/hint/show-hint.css'
@@ -89,29 +94,29 @@ export default {
         extraKeys: { Ctrl: 'autocomplete' },
       },
       mycode: this.code,
-    };
+    }
   },
   watch: {
     language(val) {
-      this.cmOptions.mode = this.map.get(val);
+      this.cmOptions.mode = this.map.get(val)
     },
     code(val) {
-      this.mycode = val;
+      this.mycode = val
     },
   },
   mounted() {
-    this.cmOptions.readOnly = this.readonly;
+    this.cmOptions.readOnly = this.readonly
     setTimeout(() => {
-      this.styleSelectedText = true;
-      this.styleActiveLine = true;
-    }, 1800);
+      this.styleSelectedText = true
+      this.styleActiveLine = true
+    }, 1800)
   },
   methods: {
     onCmCodeChange(newCode, event) {
-      this.$emit('update:code', newCode);
+      this.$emit('update:code', newCode)
     },
   },
-};
+}
 </script>
 <style lang="scss">
 .cm-matchhighlight {

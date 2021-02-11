@@ -1,47 +1,117 @@
-<template lang="pug">
-.admin-content
-  .content-header 竞赛名称: {{contest && contest.name}} 团队总数: {{contestTeamList.length}}
-  table-tools
-    template(#tool)
-      el-button(icon="el-icon-plus",@click="handleAdd") 添加
-
-  el-collapse(v-model="activeNames")
-    template(v-for="item,index in contestTeamList")
-      el-collapse-item(:title="item.name",:name="item.name")
-        .content__button__wrapper
-          el-button(type="success", size="small",@click="handleAddContestTeamUsers(item)") 添加成员
-          el-button(type="primary", size="small",@click="handleAddContestTeamAllUsers(item)") 添加全部成员
-          el-button(type="danger", size="small",@click="handleDeleteContestTeam(item)") 删除团队
-        el-table(:data="item.userinfos", style="width:100%;")
-          el-table-column(label="ID", prop="id", width="180")
-          el-table-column(label="用户名", prop="username", width="180")
-          el-table-column(label="昵称", prop="nick")
-          el-table-column(label="操作", width="180")
-            template(slot-scope="scope")
-              el-button(size="mini", type="danger", @click="handleDeleteContestTeamUser(item,scope.row)") 删除
-
-  el-dialog(title="添加团队",:visible.sync="dialogAddTeamFormVisible", @closed="closeAddTeamDialog",width="400px",:close-on-click-modal="false")
-    el-form(:model="addTeamForm", ref="addTeamForm", :rules="addTeamFormRules", @submit.native.prevent)
-      el-form-item(label="选择团队", prop="team_id")
-        el-select(v-model="addTeamForm.team_id",filterable,placeholder="请选择")
-          el-option(v-for="item in unSelectedTeams",:key="item.id",:label="item.name",:value="item.id")
-    .dialog-footer(slot="footer")
-      el-button(@click="cancelDialogAddTeam") 取消
-      el-button(type="primary", native-type="submit", @click="submitAddTeam") 确定
-
-  el-dialog(title="添加团队成员", :visible.sync="dialogAddTeamUserFormVisible", @closed="closeAddTeamUserDialog", @opened="openAddTeamUserDialog", width="400px",:close-on-click-modal="false")
-    el-form(:model="addTeamUserForm", ref="addTeamUserForm", :rules="addTeamUserFormRules", @submit.native.prevent)
-      el-form-item(label="用户名列表", prop="userList")
-        el-input(type="textarea", rows="20", v-model="addTeamUserForm.userList", ref="input", autocomplete="off",resize="none")
-    .dialog-footer(slot="footer")
-      el-button(@click="cancelDialogAddTeamUser") 取消
-      el-button(type="primary", native-type="submit", @click="submitAddTeamUsers") 确定
-
-  el-dialog(title="操作信息",:visible.sync="dialogOperatorInfoVisible",:close-on-click-modal="false",width="600px")
-    template(v-for="(item,index) in infoList")
-      p(:key="index") {{item}}
-    .dialog-footer(slot="footer")
-      el-button(type="primary",@click="dialogOperatorInfoVisible = false") 确定
+<template>
+  <div class="admin-content">
+    <div class="content-header">
+      竞赛名称: {{ contest && contest.name }} 团队总数: {{ contestTeamList.length }}
+    </div>
+    <table-tools>
+      <template #tool>
+        <el-button icon="el-icon-plus" @click="handleAdd">添加</el-button>
+      </template>
+    </table-tools>
+    <el-collapse v-model="activeNames">
+      <template v-for="(item, index) in contestTeamList">
+        <el-collapse-item :title="item.name" :name="item.name">
+          <div class="content__button__wrapper">
+            <el-button type="success" size="small" @click="handleAddContestTeamUsers(item)"
+              >添加成员</el-button
+            >
+            <el-button type="primary" size="small" @click="handleAddContestTeamAllUsers(item)"
+              >添加全部成员</el-button
+            >
+            <el-button type="danger" size="small" @click="handleDeleteContestTeam(item)"
+              >删除团队</el-button
+            >
+          </div>
+          <el-table :data="item.userinfos" style="width: 100%">
+            <el-table-column label="ID" prop="id" width="180"></el-table-column>
+            <el-table-column label="用户名" prop="username" width="180"></el-table-column>
+            <el-table-column label="昵称" prop="nick"></el-table-column>
+            <el-table-column label="操作" width="180"
+              ><template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleDeleteContestTeamUser(item, scope.row)"
+                  >删除</el-button
+                >
+              </template></el-table-column
+            >
+          </el-table>
+        </el-collapse-item>
+      </template>
+    </el-collapse>
+    <el-dialog
+      title="添加团队"
+      :visible.sync="dialogAddTeamFormVisible"
+      @closed="closeAddTeamDialog"
+      width="400px"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="addTeamForm"
+        ref="addTeamForm"
+        :rules="addTeamFormRules"
+        @submit.native.prevent
+      >
+        <el-form-item label="选择团队" prop="team_id">
+          <el-select v-model="addTeamForm.team_id" filterable="filterable" placeholder="请选择">
+            <el-option
+              v-for="item in unSelectedTeams"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div class="dialog-footer" slot="footer">
+        <el-button @click="cancelDialogAddTeam">取消</el-button>
+        <el-button type="primary" native-type="submit" @click="submitAddTeam">确定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="添加团队成员"
+      :visible.sync="dialogAddTeamUserFormVisible"
+      @closed="closeAddTeamUserDialog"
+      @opened="openAddTeamUserDialog"
+      width="400px"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="addTeamUserForm"
+        ref="addTeamUserForm"
+        :rules="addTeamUserFormRules"
+        @submit.native.prevent
+      >
+        <el-form-item label="用户名列表" prop="userList">
+          <el-input
+            type="textarea"
+            rows="20"
+            v-model="addTeamUserForm.userList"
+            ref="input"
+            autocomplete="off"
+            resize="none"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="dialog-footer" slot="footer">
+        <el-button @click="cancelDialogAddTeamUser">取消</el-button>
+        <el-button type="primary" native-type="submit" @click="submitAddTeamUsers">确定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="操作信息"
+      :visible.sync="dialogOperatorInfoVisible"
+      :close-on-click-modal="false"
+      width="600px"
+      ><template v-for="(item, index) in infoList">
+        <p :key="index">{{ item }}</p>
+      </template>
+      <div class="dialog-footer" slot="footer">
+        <el-button type="primary" @click="dialogOperatorInfoVisible = false">确定</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -53,9 +123,9 @@ import {
   addContestTeamAllUsers,
   deleteContestTeam,
   deleteContestTeamUser,
-} from 'admin/api/contest';
+} from 'admin/api/contest'
 
-import { getAllTeams } from 'admin/api/team';
+import { getAllTeams } from 'admin/api/team'
 
 export default {
   name: 'adminContestTeamManage',
@@ -95,44 +165,44 @@ export default {
         ],
       },
       tableData: [],
-    };
+    }
   },
   async activated() {
-    const { id } = this.$route.params;
+    const { id } = this.$route.params
     try {
-      getAllTeams().then((res) => {
-        this.teams = res.data.teams;
-      });
-      const res = await getContest(id);
-      this.contest = res.data.contest;
-      this.fetchDataList();
+      getAllTeams().then(res => {
+        this.teams = res.data.teams
+      })
+      const res = await getContest(id)
+      this.contest = res.data.contest
+      this.fetchDataList()
     } catch (err) {
-      this.$store.dispatch('tagsView/delViewByRoute', this.$route);
-      this.$router.replace({ name: 'admin404Page' });
-      console.log(err);
+      this.$store.dispatch('tagsView/delViewByRoute', this.$route)
+      this.$router.replace({ name: 'admin404Page' })
+      console.log(err)
     }
   },
   computed: {
     unSelectedTeams() {
-      return this.teams.filter((x) => !this.contestTeamList.find((y) => x.id === y.id));
+      return this.teams.filter(x => !this.contestTeamList.find(y => x.id === y.id))
     },
   },
   methods: {
     async fetchDataList() {
-      this.loading = true;
+      this.loading = true
       try {
-        const res = await getContestTeams(this.contest.id);
-        this.contestTeamList = res.data.data;
+        const res = await getContestTeams(this.contest.id)
+        this.contestTeamList = res.data.data
         // 默认全部展开面板
-        this.contestTeamList.forEach((val) => {
-          this.activeNames.push(val.name);
-        });
+        this.contestTeamList.forEach(val => {
+          this.activeNames.push(val.name)
+        })
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
     },
     closeAddTeamDialog() {
-      this.$refs.addTeamForm.resetFields();
+      this.$refs.addTeamForm.resetFields()
     },
     openAddTeamUserDialog() {
       this.$notify({
@@ -140,61 +210,57 @@ export default {
         message:
           '每一行对应一个用户名，若对应账号属于该团队并且没有以其他团队成员参与该竞赛则加入，否则将忽略。',
         duration: 6000,
-      });
+      })
     },
     closeAddTeamUserDialog() {
-      this.$refs.addTeamUserForm.resetFields();
+      this.$refs.addTeamUserForm.resetFields()
     },
     submitAddTeam() {
-      this.$refs.addTeamForm.validate(async (valid) => {
+      this.$refs.addTeamForm.validate(async valid => {
         if (valid) {
           try {
-            const { id } = this.$route.params;
-            await addContestTeam(id, this.addTeamForm.team_id);
-            this.fetchDataList();
-            this.dialogAddTeamFormVisible = false;
+            const { id } = this.$route.params
+            await addContestTeam(id, this.addTeamForm.team_id)
+            this.fetchDataList()
+            this.dialogAddTeamFormVisible = false
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     submitAddTeamUsers() {
-      this.$refs.addTeamUserForm.validate(async (valid) => {
+      this.$refs.addTeamUserForm.validate(async valid => {
         if (valid) {
           try {
-            const { id } = this.$route.params;
-            const res = await addContestTeamUsers(
-              id,
-              this.currentTeam.id,
-              this.addTeamUserForm,
-            );
-            this.infoList = res.data.info;
-            this.dialogOperatorInfoVisible = true;
-            this.fetchDataList();
+            const { id } = this.$route.params
+            const res = await addContestTeamUsers(id, this.currentTeam.id, this.addTeamUserForm)
+            this.infoList = res.data.info
+            this.dialogOperatorInfoVisible = true
+            this.fetchDataList()
           } catch (err) {
-            console.log(err);
+            console.log(err)
           }
-          this.dialogAddTeamUserFormVisible = false;
+          this.dialogAddTeamUserFormVisible = false
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     cancelDialogAddTeam() {
-      this.dialogAddTeamFormVisible = false;
+      this.dialogAddTeamFormVisible = false
     },
     cancelDialogAddTeamUser() {
-      this.dialogAddTeamUserFormVisible = false;
+      this.dialogAddTeamUserFormVisible = false
     },
     handleAdd() {
-      this.dialogAddTeamFormVisible = true;
+      this.dialogAddTeamFormVisible = true
     },
     handleAddContestTeamUsers(team) {
-      this.currentTeam = team;
-      this.dialogAddTeamUserFormVisible = true;
+      this.currentTeam = team
+      this.dialogAddTeamUserFormVisible = true
     },
     async handleAddContestTeamAllUsers(team) {
       try {
@@ -202,20 +268,20 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
-        });
+        })
         try {
-          const res = await addContestTeamAllUsers(this.contest.id, team.id);
-          this.infoList = res.data.info;
-          this.dialogOperatorInfoVisible = true;
-          this.fetchDataList();
+          const res = await addContestTeamAllUsers(this.contest.id, team.id)
+          this.infoList = res.data.info
+          this.dialogOperatorInfoVisible = true
+          this.fetchDataList()
         } catch (err) {
-          console.log(err);
+          console.log(err)
         }
       } catch (err) {
         this.$message({
           type: 'info',
           message: '已取消删除',
-        });
+        })
       }
     },
     async handleDeleteContestTeam(team) {
@@ -224,52 +290,43 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
-        });
+        })
         try {
-          await deleteContestTeam(this.contest.id, team.id);
-          this.fetchDataList();
+          await deleteContestTeam(this.contest.id, team.id)
+          this.fetchDataList()
         } catch (err) {
-          console.log(err);
+          console.log(err)
         }
       } catch (err) {
         this.$message({
           type: 'info',
           message: '已取消删除',
-        });
+        })
       }
     },
     async handleDeleteContestTeamUser(team, row) {
       try {
-        await this.$confirm(
-          `确认要删除团队${team.name}中成员${row.username}吗?`,
-          '提示',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          },
-        );
+        await this.$confirm(`确认要删除团队${team.name}中成员${row.username}吗?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
         try {
-          await deleteContestTeamUser(
-            this.contest.id,
-            team.id,
-            row.id,
-          );
-          this.fetchDataList();
+          await deleteContestTeamUser(this.contest.id, team.id, row.id)
+          this.fetchDataList()
         } catch (err) {
-          console.log(err);
+          console.log(err)
         }
       } catch (err) {
-        console.log(err);
+        console.log(err)
         this.$message({
           type: 'info',
           message: '已取消删除',
-        });
+        })
       }
     },
   },
-};
+}
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
