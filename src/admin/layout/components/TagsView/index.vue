@@ -5,18 +5,22 @@
         v-for="tag in visitedViews"
         ref="tag"
         :key="tag.path"
-        :class="isActive(tag)?'active':''"
+        :class="isActive(tag) ? 'active' : ''"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
         tag="span"
         class="tags-view-item"
-        @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
-        @contextmenu.prevent.native="openMenu(tag,$event)"
+        @click.middle.native="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+        @contextmenu.prevent.native="openMenu(tag, $event)"
       >
         {{ tag.title }}
-        <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+        <span
+          v-if="!isAffix(tag)"
+          class="el-icon-close"
+          @click.prevent.stop="closeSelectedTag(tag)"
+        />
       </router-link>
     </scroll-pane>
-    <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
+    <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
       <li @click="refreshSelectedTag(selectedTag)">刷新</li>
       <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">关闭</li>
       <li @click="closeOthersTags">关闭其他</li>
@@ -26,9 +30,9 @@
 </template>
 
 <script>
-import path from 'path';
-import initRoutes from 'admin/routes';
-import ScrollPane from './ScrollPane.vue';
+import path from 'path'
+import initRoutes from 'admin/routes'
+import ScrollPane from './ScrollPane.vue'
 
 export default {
   components: { ScrollPane },
@@ -40,156 +44,156 @@ export default {
       selectedTag: {},
       affixTags: [],
       initRoutes,
-    };
+    }
   },
   computed: {
     visitedViews() {
-      return this.$store.state.tagsView.visitedViews;
+      return this.$store.state.tagsView.visitedViews
     },
   },
   watch: {
     $route() {
-      this.addTags();
-      this.moveToCurrentTag();
+      this.addTags()
+      this.moveToCurrentTag()
     },
     visible(value) {
       if (value) {
-        document.body.addEventListener('click', this.closeMenu);
+        document.body.addEventListener('click', this.closeMenu)
       } else {
-        document.body.removeEventListener('click', this.closeMenu);
+        document.body.removeEventListener('click', this.closeMenu)
       }
     },
   },
   mounted() {
-    this.initTags();
-    this.addTags();
+    this.initTags()
+    this.addTags()
   },
   methods: {
     isActive(route) {
-      return route.path === this.$route.path;
+      return route.path === this.$route.path
     },
     isAffix(tag) {
-      return tag.meta && tag.meta.affix;
+      return tag.meta && tag.meta.affix
     },
     filterAffixTags(routes, basePath = '/') {
-      let tags = [];
-      routes.forEach((route) => {
+      let tags = []
+      routes.forEach(route => {
         if (route.meta && route.meta.affix) {
-          const tagPath = path.resolve(basePath, route.path);
+          const tagPath = path.resolve(basePath, route.path)
           tags.push({
             fullPath: tagPath,
             path: tagPath,
             name: route.name,
             meta: { ...route.meta },
-          });
+          })
         }
         if (route.children) {
-          const tempTags = this.filterAffixTags(route.children, route.path);
+          const tempTags = this.filterAffixTags(route.children, route.path)
           if (tempTags.length >= 1) {
-            tags = [...tags, ...tempTags];
+            tags = [...tags, ...tempTags]
           }
         }
-      });
-      return tags;
+      })
+      return tags
     },
     initTags() {
-      this.affixTags = this.filterAffixTags(this.initRoutes);
-      const { affixTags } = this;
-      affixTags.forEach((x) => {
+      this.affixTags = this.filterAffixTags(this.initRoutes)
+      const { affixTags } = this
+      affixTags.forEach(x => {
         if (x.name) {
-          this.$store.dispatch('tagsView/addVisitedView', x);
+          this.$store.dispatch('tagsView/addVisitedView', x)
         }
-      });
+      })
     },
     addTags() {
-      const { name } = this.$route;
+      const { name } = this.$route
       if (name) {
-        this.$store.dispatch('tagsView/addView', this.$route);
+        this.$store.dispatch('tagsView/addView', this.$route)
       }
-      return false;
+      return false
     },
     moveToCurrentTag() {
-      const tags = this.$refs.tag;
+      const tags = this.$refs.tag
       this.$nextTick(() => {
         // eslint-disable-next-line no-restricted-syntax
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {
-            this.$refs.scrollPane.moveToTarget(tag);
+            this.$refs.scrollPane.moveToTarget(tag)
             // when query is different then update
             if (tag.to.fullPath !== this.$route.fullPath) {
-              this.$store.dispatch('tagsView/updateVisitedView', this.$route);
+              this.$store.dispatch('tagsView/updateVisitedView', this.$route)
             }
-            break;
+            break
           }
         }
-      });
+      })
     },
     refreshSelectedTag(view) {
       this.$store.dispatch('tagsView/delCachedView', view).then(() => {
-        const { fullPath } = view;
+        const { fullPath } = view
         this.$nextTick(() => {
           this.$router.replace({
             path: `/redirect${fullPath}`,
-          });
-        });
-      });
+          })
+        })
+      })
     },
     closeSelectedTag(view) {
       this.$store.dispatch('tagsView/delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
-          this.toLastView(visitedViews, view);
+          this.toLastView(visitedViews, view)
         }
-      });
+      })
     },
     closeOthersTags() {
-      this.$router.push(this.selectedTag);
+      this.$router.push(this.selectedTag)
       this.$store.dispatch('tagsView/delOthersViews', this.selectedTag).then(() => {
-        this.moveToCurrentTag();
-      });
+        this.moveToCurrentTag()
+      })
     },
     closeAllTags(view) {
       this.$store.dispatch('tagsView/delAllViews').then(({ visitedViews }) => {
-        if (this.affixTags.some((tag) => tag.path === view.path)) {
-          return;
+        if (this.affixTags.some(tag => tag.path === view.path)) {
+          return
         }
-        this.toLastView(visitedViews, view);
-      });
+        this.toLastView(visitedViews, view)
+      })
     },
     toLastView(visitedViews, view) {
-      const latestView = visitedViews.slice(-1)[0];
+      const latestView = visitedViews.slice(-1)[0]
       if (latestView) {
-        this.$router.push(latestView.fullPath);
+        this.$router.push(latestView.fullPath)
       } else if (view.name === 'home') {
         // now the default is to redirect to the home page if there is no tags-view,
         // you can adjust it according to your needs.
         // to reload home page
-        this.$router.replace({ path: `/redirect${view.fullPath}` });
+        this.$router.replace({ path: `/redirect${view.fullPath}` })
       } else {
-        this.$router.push('/admin');
+        this.$router.push('/admin')
       }
     },
     openMenu(tag, e) {
-      const menuMinWidth = 105;
-      const offsetLeft = this.$el.getBoundingClientRect().left; // container margin left
-      const { offsetWidth } = this.$el; // container width
-      const maxLeft = offsetWidth - menuMinWidth; // left boundary
-      const left = e.clientX - offsetLeft + 15; // 15: margin right
+      const menuMinWidth = 105
+      const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
+      const { offsetWidth } = this.$el // container width
+      const maxLeft = offsetWidth - menuMinWidth // left boundary
+      const left = e.clientX - offsetLeft + 15 // 15: margin right
 
       if (left > maxLeft) {
-        this.left = maxLeft;
+        this.left = maxLeft
       } else {
-        this.left = left;
+        this.left = left
       }
 
-      this.top = e.clientY;
-      this.visible = true;
-      this.selectedTag = tag;
+      this.top = e.clientY
+      this.visible = true
+      this.selectedTag = tag
     },
     closeMenu() {
-      this.visible = false;
+      this.visible = false
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -13,6 +13,10 @@ export const useMessge = () => {
   return useVue().$message
 }
 
+export const useConfirm = () => {
+  return useVue().$confirm
+}
+
 export const useLoading = () => {
   return useVue().$loading
 }

@@ -72,6 +72,7 @@ function successState(res) {
   return res
 }
 
+/** 在这里为 ref 类型的参数进行 unref */
 function request<T = object>(method: Method, url: string, payload = {}, options = {}) {
   const methodUpperCase = <string>method.toUpperCase()
   const httpDefault: AxiosRequestConfig = {
@@ -103,3 +104,5 @@ export const post = (url: string, defaultOptions?) => <T>(payload = {}, options 
   request<T>('post', url, payload, merge(defaultOptions, options))
 export const put = (url: string, defaultOptions?) => <T>(payload = {}, options = {}) =>
   request<T>('put', url, payload, merge(defaultOptions, options))
+export const del = (url: string, defaultOptions?) => <T>(payload = {}, options = {}) =>
+  request<T>('delete', url, payload, merge(defaultOptions, options))
