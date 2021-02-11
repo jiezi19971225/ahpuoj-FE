@@ -4,7 +4,6 @@
       <template #table-tool>
         <el-button icon="el-icon-plus" @click="handleCreate">新建</el-button>
       </template>
-
       <template #table-search="{ queryParams, handleSearch }">
         <el-input
           placeholder="搜索标签名称"

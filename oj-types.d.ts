@@ -19,6 +19,11 @@ export declare global {
     role_id: number
   }
 
+  declare interface Role {
+    description: string
+    id: number
+    name: string
+  }
   declare interface New {
     content: string
     created_at: string

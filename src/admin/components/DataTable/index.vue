@@ -14,7 +14,7 @@
     <div class="content__table__wrapper" v-loading="tableLoading">
       <slot name="table"></slot>
     </div>
-    <div class="content__pagination__wrapper">
+    <div class="content__pagination__wrapper" v-if="pagination">
       <oj-paginator
         @change="fetchDataList"
         :current-page.sync="page"
@@ -38,8 +38,8 @@ export default defineComponent({
       require: true,
     },
     pagination: {
-      type: Object,
-      default: () => {},
+      type: Boolean,
+      default: true,
     },
     defaultQuery: {
       type: Object,
@@ -66,8 +66,10 @@ export default defineComponent({
 
     const fetchDataList = async () => {
       const params = {
-        ...pagination,
         ...queryParams,
+      }
+      if (props.pagination) {
+        Object.assign(params, pagination)
       }
       tableLoading.value = true
       // @ts-ignore
