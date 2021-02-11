@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onActivated, ref } from '@vue/composition-api'
+import { defineComponent, nextTick, onActivated, ref } from '@vue/composition-api'
 import { usePagination, useQuery, useRouter } from '@common/use'
 import * as nologinApi from '@user/api/nologints'
 
@@ -87,7 +87,7 @@ export default defineComponent({
     const defaultQuery = {
       param: '',
     }
-    const { query, queryParams } = useQuery(defaultQuery)
+    const { query, queryParams, syncQuery } = useQuery(defaultQuery)
     const router = useRouter()
     const pagination = usePagination()
 
@@ -111,7 +111,10 @@ export default defineComponent({
     }
 
     onActivated(() => {
-      fetchDataList()
+      nextTick(() => {
+        syncQuery()
+        fetchDataList()
+      })
     })
 
     const handleSearch = (queryObj = {}) => {

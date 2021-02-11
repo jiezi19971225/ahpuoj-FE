@@ -134,7 +134,7 @@ export default defineComponent({
         },
         query: {
           result: '4',
-          nick: user.value.nick,
+          username: user.value.nick,
         },
       })
     }
@@ -146,7 +146,7 @@ export default defineComponent({
           id: route.value.params.id,
         },
         query: {
-          nick: user.value.nick,
+          username: user.value.nick,
         },
       })
     }

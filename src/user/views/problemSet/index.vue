@@ -50,10 +50,10 @@
                 <el-button
                   size="mini"
                   round="round"
-                  :class="[queryParams.tagId.toString() === tag.id.toString() ? 'is-active' : '']"
+                  :class="[queryParams.tag_id.toString() === tag.id.toString() ? 'is-active' : '']"
                   @click="
                     handleSearch({
-                      tagId: tag.id,
+                      tag_id: tag.id,
                     })
                   "
                   >{{ tag.name }}</el-button
@@ -137,7 +137,7 @@
 <script lang="ts">
 import * as nologinApi from '@user/api/nologints'
 import { usePagination, useQuery, useRouter } from '@common/use'
-import { ref, onActivated, defineComponent } from '@vue/composition-api'
+import { ref, onActivated, defineComponent, nextTick } from '@vue/composition-api'
 import { ProblemDegree, ProblemDegreeMap } from '@common/const/enum'
 import { isEmpty } from 'lodash'
 
@@ -165,12 +165,12 @@ export default defineComponent({
   setup() {
     const defaultQuery = {
       param: '',
-      tagId: '',
+      tag_id: '',
       level: '',
     }
 
     const router = useRouter()
-    const { query, queryParams } = useQuery(defaultQuery)
+    const { query, queryParams, syncQuery } = useQuery(defaultQuery)
     const pagination = usePagination({
       perpage: 50,
     })
@@ -206,10 +206,11 @@ export default defineComponent({
     }
 
     onActivated(() => {
-      if (!isEmpty(query.value)) {
-        Object.assign(queryParams, query.value)
-      }
-      fetchDataList()
+      // 这里测试有一个问题，必须放到 nextTick 中 query.value 才能拿到值
+      nextTick(() => {
+        syncQuery()
+        fetchDataList()
+      })
     })
 
     const handleSearch = (queryObj = {}) => {

@@ -345,11 +345,11 @@ export default defineComponent({
       return ''
     })
 
-    const handleSearchTag = tagId => {
+    const handleSearchTag = tag_id => {
       router.push({
         name: 'problemSet',
         query: {
-          tagId,
+          tag_id,
         },
       })
     }

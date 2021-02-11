@@ -57,7 +57,7 @@
 <script lang="ts">
 import * as nologinApi from '@user/api/nologints'
 import { usePagination, useQuery, useRouter } from '@common/use'
-import { onActivated, ref } from '@vue/composition-api'
+import { nextTick, onActivated, ref } from '@vue/composition-api'
 
 export default {
   setup() {
@@ -65,7 +65,7 @@ export default {
       param: '',
     }
 
-    const { query, queryParams } = useQuery(defaultQuery)
+    const { query, queryParams, syncQuery } = useQuery(defaultQuery)
     const router = useRouter()
 
     const tableLoading = ref(false)
@@ -90,7 +90,10 @@ export default {
     }
 
     onActivated(() => {
-      fetchDataList()
+      nextTick(() => {
+        syncQuery()
+        fetchDataList()
+      })
     })
 
     const handleSearch = (queryObj = {}) => {

@@ -8,6 +8,7 @@ import {
   UnwrapRef,
   set,
 } from '@vue/composition-api'
+import { isEmpty } from 'lodash'
 
 export const useRoute = () => {
   const vm = getCurrentInstance().proxy
@@ -28,6 +29,7 @@ export const useQuery = <T extends object>(params?: T) => {
   })
 
   let queryParams: UnwrapRef<T>
+
   if (params) {
     queryParams = reactive({} as T)
     Object.keys(params).forEach(key => {
@@ -35,5 +37,11 @@ export const useQuery = <T extends object>(params?: T) => {
     })
   }
 
-  return { query, queryParams }
+  const syncQuery = () => {
+    if (!isEmpty(query.value)) {
+      Object.assign(queryParams, params, query.value)
+    }
+  }
+
+  return { query, queryParams, syncQuery }
 }

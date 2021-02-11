@@ -37,7 +37,7 @@
                 style="max-width: 20em"
                 placeholder="请输入用户昵称"
                 @keyup.enter.native="handleSearch"
-                v-model="queryParams.nick"
+                v-model="queryParams.username"
                 maxlength="20"
                 clearable="clearable"
               >
@@ -66,7 +66,9 @@
                   <el-button
                     size="mini"
                     round="round"
-                    :class="[queryParams.language === index ? 'is-active' : '']"
+                    :class="[
+                      queryParams.language.toString() === index.toString() ? 'is-active' : '',
+                    ]"
                     @click="
                       handleSearch({
                         language: index,
@@ -85,7 +87,9 @@
                 <el-button
                   size="mini"
                   round="round"
-                  :class="[queryParams.result === item.code ? 'is-active' : '']"
+                  :class="[
+                    queryParams.result.toString() === item.code.toString() ? 'is-active' : '',
+                  ]"
                   @click="
                     handleSearch({
                       result: item.code,
@@ -189,7 +193,14 @@
 <script lang="ts">
 import * as nologinApi from '@user/api/nologints'
 import { resultList } from '@common/const'
-import { onActivated, onDeactivated, onUnmounted, ref, toRefs } from '@vue/composition-api'
+import {
+  nextTick,
+  onActivated,
+  onDeactivated,
+  onUnmounted,
+  ref,
+  toRefs,
+} from '@vue/composition-api'
 import { useLangList, useMapState, usePagination, useQuery, useRoute, useRouter } from '@common/use'
 import { isEmpty } from 'lodash'
 import { getAlphabetNumber, getAbsoluteUrl } from '@common/utils'
@@ -221,7 +232,7 @@ export default {
 
     const route = useRoute()
     const router = useRouter()
-    const { query, queryParams } = useQuery(defaultQuery)
+    const { query, queryParams, syncQuery } = useQuery(defaultQuery)
     const states = useMapState({
       user: (state: any) => state.user,
     })
@@ -254,18 +265,18 @@ export default {
 
     let timer
     onActivated(() => {
-      if (toRefProps.isContest.value) {
-        contestId.value = +route.value.params.id
-      } else {
-        contestId.value = 0
-      }
-      if (!isEmpty(query.value)) {
-        Object.assign(queryParams, query.value)
-      }
-      timer = setInterval(() => {
+      nextTick(() => {
+        if (toRefProps.isContest.value) {
+          contestId.value = +route.value.params.id
+        } else {
+          contestId.value = 0
+        }
+        timer = setInterval(() => {
+          fetchDataList()
+        }, 10000)
+        syncQuery()
         fetchDataList()
-      }, 10000)
-      fetchDataList()
+      })
     })
 
     onDeactivated(() => {
