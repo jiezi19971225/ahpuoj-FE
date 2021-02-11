@@ -47,18 +47,16 @@
               <el-button
                 size="mini"
                 :type="scope.row.defunct == 0 ? 'danger' : 'success'"
-                @click="handleToggleNewStatus(scope.row)"
+                @click="handleToggleStatus(scope.row)"
                 >{{ scope.row.defunct == 0 ? '隐藏' : '显示' }}</el-button
               >
               <el-button
                 size="mini"
                 :type="scope.row.top == 0 ? 'success' : 'danger'"
-                @click="handleToggleNewTopStatus(scope.row)"
+                @click="handleToggleTopStatus(scope.row)"
                 >{{ scope.row.top == 0 ? '置顶' : '取置' }}</el-button
               >
-              <el-button size="mini" type="danger" @click="handleDeleteNew(scope.row)"
-                >删除</el-button
-              >
+              <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -96,7 +94,7 @@ export default defineComponent({
       return res
     }
 
-    const handleToggleNewStatus = async row => {
+    const handleToggleStatus = async row => {
       const msg = `确认要${row.defunct === 0 ? '隐藏' : '显示'}新闻${row.title}吗?`
       try {
         await confirm(msg, '提示', {
@@ -104,18 +102,14 @@ export default defineComponent({
           cancelButtonText: '取消',
           type: 'warning',
         })
-        try {
-          await newApi.toggleNewStatus(row.id)()
-          dataTableRef.value.fetchDataList()
-        } catch (err) {
-          console.log(err)
-        }
+        await newApi.toggleNewStatus(row.id)()
+        dataTableRef.value.fetchDataList()
       } catch (err) {
         console.log(err)
       }
     }
 
-    const handleToggleNewTopStatus = async row => {
+    const handleToggleTopStatus = async row => {
       const msg = `确认要${row.top === 0 ? '置顶' : '取置'}新闻${row.title}吗?`
       try {
         await confirm(msg, '提示', {
@@ -123,30 +117,22 @@ export default defineComponent({
           cancelButtonText: '取消',
           type: 'warning',
         })
-        try {
-          await newApi.toggleNewTopStatus(row.id)()
-          dataTableRef.value.fetchDataList()
-        } catch (err) {
-          console.log(err)
-        }
+        await newApi.toggleNewTopStatus(row.id)()
+        dataTableRef.value.fetchDataList()
       } catch (err) {
         console.log(err)
       }
     }
 
-    const handleDeleteNew = async row => {
+    const handleDelete = async row => {
       try {
         await confirm(`确认要删除新闻${row.title}吗?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
         })
-        try {
-          await newApi.deleteNew(row.id)()
-          dataTableRef.value.fetchAfterDelete(dataList.value.length === 1)
-        } catch (err) {
-          console.log(err)
-        }
+        await newApi.deleteNew(row.id)()
+        dataTableRef.value.fetchAfterDelete(dataList.value.length === 1)
       } catch (err) {
         console.log(err)
       }
@@ -158,9 +144,9 @@ export default defineComponent({
       dataList,
 
       fetchFn,
-      handleToggleNewStatus,
-      handleToggleNewTopStatus,
-      handleDeleteNew,
+      handleToggleStatus,
+      handleToggleTopStatus,
+      handleDelete,
     }
   },
 })

@@ -47,7 +47,7 @@
               <el-button
                 size="mini"
                 :type="scope.row.defunct == 0 ? 'danger' : 'success'"
-                @click="handleToggleUserStatus(scope.row)"
+                @click="handleToggleStatus(scope.row)"
                 >{{ scope.row.defunct == 0 ? '禁用' : '启用' }}
               </el-button>
             </template>
@@ -91,7 +91,7 @@ export default defineComponent({
       return res
     }
 
-    const handleToggleUserStatus = async row => {
+    const handleToggleStatus = async row => {
       const msg = `确认要${row.defunct === 0 ? '禁用' : '启用'}用户${row.username}吗?`
       try {
         await confirm(msg, '提示', {
@@ -99,12 +99,8 @@ export default defineComponent({
           cancelButtonText: '取消',
           type: 'warning',
         })
-        try {
-          await userApi.toggleUserStatus(row.id)()
-          dataTableRef.value.fetchDataList()
-        } catch (err) {
-          console.log(err)
-        }
+        await userApi.toggleUserStatus(row.id)()
+        dataTableRef.value.fetchDataList()
       } catch (err) {
         console.log(err)
       }
@@ -121,7 +117,7 @@ export default defineComponent({
       dataList,
 
       fetchFn,
-      handleToggleUserStatus,
+      handleToggleStatus,
       handleChangePass,
     }
   },

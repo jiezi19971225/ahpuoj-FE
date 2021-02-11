@@ -1,55 +1,53 @@
 <template>
-  <el-dialog title="修改密码" :visible.sync="visible" width="400px" :close-on-click-modal="false">
+  <el-dialog :title="title" :visible.sync="visible" width="400px" :close-on-click-modal="false">
     <el-form :model="form" ref="formRef" :rules="rules" @submit.native.prevent>
-      <el-form-item label="新密码" prop="password">
+      <el-form-item label="团队名称" prop="name">
         <el-input
-          v-model="form.password"
+          v-model="form.name"
           ref="input"
           autocomplete="off"
           @keyup.enter.native="submit"
-        >
-        </el-input>
+        ></el-input>
       </el-form-item>
     </el-form>
     <div class="dialog-footer" slot="footer">
       <el-button @click="cancel">取消</el-button>
-      <el-button type="primary" native-type="submit" @click="submit">确定</el-button>
+      <el-button type="primary" native-type="submit" @click="submit" :loading="loading"
+        >确定</el-button
+      >
     </div>
   </el-dialog>
 </template>
 
 <script lang="ts">
-import * as userApi from '@admin/api/userts'
-import { defineComponent, markRaw, reactive, ref } from '@vue/composition-api'
+import * as teamApi from '@admin/api/teamts'
+import {
+  computed,
+  defineComponent,
+  inject,
+  markRaw,
+  reactive,
+  Ref,
+  ref,
+  nextTick,
+} from '@vue/composition-api'
 import { ElForm } from 'element-ui/types/form.d'
 
 export default defineComponent({
   setup() {
     const formRef = ref<ElForm>()
-    const localInfo = ref<User>()
-    const loading = ref(false)
+    const localInfo = ref<Team>()
     const visible = ref(false)
+    const loading = ref(false)
+    const isEdit = ref(false)
     const form = reactive({
-      password: '',
+      name: '',
     })
-
     const rules = markRaw({
       password: [
         {
           required: true,
-          message: '请输入新的用户密码',
-          trigger: 'blur',
-        },
-        {
-          // 匹配ascii字符
-          // eslint-disable-next-line no-control-regex
-          pattern: /^[\x00-\xff]+$/,
-          message: '密码只能包含ascii字符',
-          trigger: 'blur',
-        },
-        {
-          min: 6,
-          message: '密码最少为6位',
+          message: '请输入团队名称',
           trigger: 'blur',
         },
         {
@@ -60,12 +58,23 @@ export default defineComponent({
       ],
     })
 
+    const dataTableRef = inject('dataTableRef') as Ref
+
+    const title = computed(() => {
+      return isEdit.value ? '编辑团队' : '新建团队'
+    })
+
     const submit = () => {
       formRef.value.validate(async valid => {
         if (valid) {
           loading.value = true
           try {
-            await userApi.changeUserPass(localInfo.value.id)(form)
+            if (isEdit.value) {
+              await teamApi.editTeam(localInfo.value.id)(form)
+            } else {
+              await teamApi.createTeam(form)
+            }
+            dataTableRef.value.fetchDataList()
             visible.value = false
           } catch (err) {
             console.log(err)
@@ -80,10 +89,20 @@ export default defineComponent({
       visible.value = false
     }
 
-    const show = info => {
+    const showCreate = () => {
+      isEdit.value = false
+      formRef.value?.resetFields()
+      visible.value = true
+    }
+
+    const showEdit = info => {
+      isEdit.value = true
       formRef.value?.resetFields()
       localInfo.value = info
       visible.value = true
+      nextTick(() => {
+        form.name = info.name
+      })
     }
 
     return {
@@ -92,8 +111,10 @@ export default defineComponent({
       visible,
       loading,
       rules,
+      title,
 
-      show,
+      showCreate,
+      showEdit,
       cancel,
       submit,
     }
