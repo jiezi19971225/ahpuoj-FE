@@ -89,10 +89,7 @@ export default {
             this.$store.dispatch('tagsView/delViewByRoute', this.$route)
             this.$router.push({ name: 'adminNewList' })
           } catch (err) {
-            this.$message({
-              message: err.response.data.message,
-              type: 'error',
-            })
+            console.log(err)
           }
         } else {
           this.$message({

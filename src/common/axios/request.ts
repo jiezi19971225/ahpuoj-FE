@@ -2,16 +2,16 @@ import axios, { AxiosRequestConfig, Method } from 'axios'
 import { setupCache } from 'axios-cache-adapter'
 import Cookies from 'js-cookie'
 import { Message } from 'element-ui'
-import { unWrapObj } from 'common/utils/composition'
 import dayjs from 'dayjs'
 import { isObject, merge } from 'lodash'
+import { unWrapObj } from '../utils/composition'
 
 const baseURL = '/api'
 const cache = setupCache({
   maxAge: 0,
 })
 
-const instance = axios.create({
+export const instance = axios.create({
   adapter: cache.adapter,
 })
 const timeFields = ['created_at', 'updated_at', 'start_time', 'end_time']
@@ -77,7 +77,7 @@ function request<T = object>(method: Method, url: string, payload = {}, options 
   const methodUpperCase = <string>method.toUpperCase()
   const httpDefault: AxiosRequestConfig = {
     method,
-    baseURL,
+    baseURL: instance.defaults.baseURL || baseURL,
     url,
     params: ['GET', 'DELETE'].includes(methodUpperCase) ? unWrapObj(payload) : null,
     data: ['POST', 'PUT'].includes(methodUpperCase) ? unWrapObj(payload) : null,
