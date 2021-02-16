@@ -1,30 +1,25 @@
+import { generateRandomString } from './common'
 import * as newApi from '../../src/admin/api/newts'
 
-const generateRandomString = length => {
-  const pool = 'abcdefghijklmnopqrstuvwxyz0123456789'
-  let res = ''
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < length; i++) {
-    const randIndex = Math.ceil(Math.random() * 1000) % 36
-    res += pool[randIndex]
-  }
-  console.log(res)
-  return res
-}
-
 describe('news crud', () => {
-  let newObject
+  let newRecord
   it('createNew', async done => {
-    const randomTitle = generateRandomString(10)
-    newApi
+    const randomString = generateRandomString(10)
+    await newApi
       .createNew({
-        title: randomTitle,
+        title: randomString,
         content: 'content',
       })
       .then(res => {
-        console.log(res)
-        newObject = res.new
-        expect(res.new.title).toBe(randomTitle)
+        newRecord = res.new
+      })
+      .catch(err => {
+        done(err)
+      })
+    newApi
+      .getNew(newRecord.id)()
+      .then(res => {
+        expect(res.new.title).toBe(randomString)
         expect(res.new.content).toBe('content')
         done()
       })
@@ -33,15 +28,16 @@ describe('news crud', () => {
       })
   })
   it('editNew', async done => {
-    const randomTitle = generateRandomString(10)
+    const randomString = generateRandomString(10)
+    await newApi.editNew(newRecord.id)({
+      title: randomString,
+      content: 'content',
+    })
     newApi
-      .editNew(newObject.id)({
-        title: randomTitle,
-        content: 'content',
-      })
+      .getNew(newRecord.id)()
       .then(res => {
-        console.log(res)
-        expect(res.new.title).toBe(randomTitle)
+        newRecord = res.new
+        expect(res.new.title).toBe(randomString)
         expect(res.new.content).toBe('content')
         done()
       })
@@ -50,9 +46,9 @@ describe('news crud', () => {
       })
   })
   it('toggleStatus', async done => {
-    await newApi.toggleNewStatus(newObject.id)()
+    await newApi.toggleNewStatus(newRecord.id)()
     newApi
-      .getNew(newObject.id)()
+      .getNew(newRecord.id)()
       .then(res => {
         expect(res.new.defunct).toBe(1)
         done()
@@ -62,9 +58,9 @@ describe('news crud', () => {
       })
   })
   it('toggleNewTopStatus', async done => {
-    await newApi.toggleNewTopStatus(newObject.id)()
+    await newApi.toggleNewTopStatus(newRecord.id)()
     newApi
-      .getNew(newObject.id)()
+      .getNew(newRecord.id)()
       .then(res => {
         expect(res.new.top).toBeGreaterThan(0)
         done()
@@ -73,10 +69,24 @@ describe('news crud', () => {
         done(err)
       })
   })
-  it('deleteNew', async done => {
-    await newApi.deleteNew(newObject.id)()
+  it('getNewList', async done => {
     newApi
-      .getNew(newObject.id)()
+      .getNewList({
+        page: 1,
+        perpage: 10,
+      })
+      .then(res => {
+        expect(res.data[0].id).toBe(newRecord.id)
+        done()
+      })
+      .catch(err => {
+        done(err)
+      })
+  })
+  it('deleteNew', async done => {
+    await newApi.deleteNew(newRecord.id)()
+    newApi
+      .getNew(newRecord.id)()
       .then(res => {
         done(res)
       })
