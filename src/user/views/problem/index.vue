@@ -322,7 +322,7 @@ export default defineComponent({
             Object.assign(form, {
               problem_id: problem.value.id,
               contest_id: id,
-              num: problem.value.id,
+              num,
             })
             testRunForm.input_text = problem.value.sample_input
           })

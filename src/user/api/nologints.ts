@@ -1,4 +1,4 @@
-import { get } from '@common/axios/request'
+import { get } from '../../common/axios/request'
 
 /** 获取新闻列表 */
 export const getNewList = get('/news')

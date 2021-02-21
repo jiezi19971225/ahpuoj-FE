@@ -38,7 +38,7 @@ instance.interceptors.response.use(
           obj[key] = solve(obj[key])
         }
         if (typeof obj[key] === 'string' && timeFields.includes(key) && dayjs(obj[key]).isValid()) {
-          obj[key] = dayjs(obj[key]).format('YYYY-MM-DD hh:mm:ss')
+          obj[key] = dayjs(obj[key]).format('YYYY-MM-DD HH:mm:ss')
         }
       })
       return obj

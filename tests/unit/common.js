@@ -3,9 +3,10 @@ import { instance } from '../../src/common/axios/request'
 instance.defaults.baseURL = 'http://127.0.0.1:8080/api/'
 instance.defaults.adapter = require('axios/lib/adapters/http')
 
-instance.defaults.headers.Authorization = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjIwNjQ5MTI0fQ.6WnpsJPRBGRWV5L_euV8A0gTLscdpDN349hXCZEdBlQ`
+const adminToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjIxMDk0MDYxfQ.cLpHKWq2HkJg7N9zc4FOiMTu-DWCL35YHTmvoBM7TfA`
+instance.defaults.headers.Authorization = adminToken
 
-export const generateRandomString = length => {
+const generateRandomString = length => {
   const pool = 'abcdefghijklmnopqrstuvwxyz0123456789'
   let res = ''
   // eslint-disable-next-line no-plusplus
@@ -16,3 +17,5 @@ export const generateRandomString = length => {
   console.log(res)
   return res
 }
+
+export { instance, generateRandomString }

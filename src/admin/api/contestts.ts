@@ -1,4 +1,4 @@
-import { get, post, put, del } from '@common/axios/request'
+import { get, post, put, del } from '../../common/axios/request'
 
 /** 创建竞赛 */
 export const createContest = post(`/admin/contest`)

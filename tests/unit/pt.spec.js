@@ -68,7 +68,6 @@ describe('prlblems crud', () => {
       .getProblem(newRecord.id)()
       .then(res => {
         console.log(res)
-        newRecord = res.problem
         expect(res.problem.title).toBe(randomString)
         expect(res.problem.time_limit).toBe(1)
         expect(res.problem.memory_limit).toBe(128)
@@ -176,12 +175,7 @@ describe('prlblems crud', () => {
         done(err)
       })
     await problemApi
-      .getProblemDataFile(
-        newRecord.id,
-        `${randomString}.in`
-      )({
-        content: randomContent,
-      })
+      .getProblemDataFile(newRecord.id, `${randomString}.in`)()
       .then(res => {
         expect(res.content).toBe(randomContent)
       })

@@ -1,5 +1,5 @@
-import { get, post, put } from '@common/axios/request'
 import Cookies from 'js-cookie'
+import { get, post, put } from '../../common/axios/request'
 /** 登录 */
 export const login = post('/login')
 /** 注册 */

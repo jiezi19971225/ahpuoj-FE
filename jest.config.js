@@ -8,4 +8,5 @@ module.exports = {
     '^.+\\.(js|jsx)$': 'babel-jest',
   },
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'js', 'ts', 'tsx'],
+  testTimeout: 10000,
 }

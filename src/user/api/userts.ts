@@ -1,4 +1,4 @@
-import { get, post, put } from '@common/axios/request'
+import { get, post, put } from '../../common/axios/request'
 
 /**    */
 export const getUser = get('/user')
