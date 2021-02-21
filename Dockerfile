@@ -3,11 +3,17 @@ FROM node:12
 
 LABEL authors="jiezi19971225@gmail.com"
 
+# 通过
+
+COPY package.json /app/package.json
+
+RUN cd /app && npm install --registry=https://registry.npm.taobao.org
+
 COPY ./ /app
 
 WORKDIR /app
 
-RUN npm install --registry=https://registry.npm.taobao.org && npm run build
+RUN npm run build
 
 # STEP 2: Setup
 FROM nginx:latest
