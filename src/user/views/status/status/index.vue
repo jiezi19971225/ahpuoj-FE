@@ -249,10 +249,10 @@ export default {
       try {
         tableLoading.value = true
         const res = await nologinApi.getSolutionList<CommonPaginationResponse<SolutionInfo[]>>({
+          ...queryParams,
           contest_id: contestId.value,
           page: pagination.page,
           perpage: pagination.perpage,
-          ...queryParams,
         })
         dataList.value = res.data
         pagination.total.value = res.total

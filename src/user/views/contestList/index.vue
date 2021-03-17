@@ -98,9 +98,9 @@ export default defineComponent({
       tableLoading.value = true
       try {
         const res = await nologinApi.getContestList<CommonPaginationResponse<ContestDto[]>>({
+          ...queryParams,
           page: pagination.page,
           perpage: pagination.perpage,
-          ...queryParams,
         })
         dataList.value = res.data
         pagination.total.value = res.total

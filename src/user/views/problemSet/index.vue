@@ -139,7 +139,6 @@ import * as nologinApi from '@user/api/nologints'
 import { usePagination, useQuery, useRouter } from '@common/use'
 import { ref, onActivated, defineComponent, nextTick } from '@vue/composition-api'
 import { ProblemDegree, ProblemDegreeMap } from '@common/const/enum'
-import { isEmpty } from 'lodash'
 
 const problemDegreeList = [
   {
@@ -192,9 +191,9 @@ export default defineComponent({
       tableLoading.value = true
       try {
         const res = await nologinApi.getProblemList<CommonPaginationResponse<ProblemListItem[]>>({
+          ...queryParams,
           page: pagination.page,
           perpage: pagination.perpage,
-          ...queryParams,
         })
         dataList.value = res.data
         pagination.total.value = res.total

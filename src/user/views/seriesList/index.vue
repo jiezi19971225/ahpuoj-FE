@@ -76,9 +76,9 @@ export default {
       tableLoading.value = true
       try {
         const res = await nologinApi.getSeriesList<CommonPaginationResponse<Series[]>>({
+          ...queryParams,
           page: pagination.page,
           perpage: pagination.perpage,
-          ...queryParams,
         })
         dataList.value = res.data
         pagination.total.value = res.total
