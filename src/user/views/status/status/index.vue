@@ -112,23 +112,24 @@
         ></oj-paginator>
         <el-table size="small" :data="dataList" v-loading="tableLoading">
           <el-table-column label="ID" prop="solution_id" width="60"></el-table-column>
-          <el-table-column label="用户" min-width="70"
-            ><template slot-scope="scope">
+          <el-table-column label="用户" min-width="70">
+            <template slot-scope="scope">
               <router-link :to="{ name: 'userinfo', params: { id: scope.row.user_id } }">
                 <div class="user__avatar__wrapper">
                   <img class="user__avatar" :src="getAbsoluteUrl(scope.row.avatar)" />
                 </div>
-              </router-link> </template
-          ></el-table-column>
-          <el-table-column min-width="180"
-            ><template slot-scope="scope">
-              <router-link :to="{ name: 'userinfo', params: { id: scope.row.user_id } }"
-                ><span>{{ `${scope.row.nick}` }}</span></router-link
-              >
-            </template></el-table-column
-          >
-          <el-table-column label="问题" min-width="180"
-            ><template slot-scope="scope">
+              </router-link>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="180">
+            <template slot-scope="scope">
+              <router-link :to="{ name: 'userinfo', params: { id: scope.row.user_id } }">
+                <span>{{ `${scope.row.nick}` }}</span>
+              </router-link>
+            </template>
+          </el-table-column>
+          <el-table-column label="问题" min-width="180">
+            <template slot-scope="scope">
               <router-link
                 :to="
                   isContest
@@ -141,49 +142,49 @@
                     : `${getAlphabetNumber(scope.row.num)} ${scope.row.problem_title}`
                 }}</router-link
               >
-            </template></el-table-column
-          >
-          <el-table-column label="评测状态" min-width="80"
-            ><template slot-scope="scope">
+            </template>
+          </el-table-column>
+          <el-table-column label="评测状态" min-width="80">
+            <template slot-scope="scope">
               <router-link :to="{ name: 'solution', params: { id: scope.row.solution_id } }">
                 <el-button size="mini" :type="calcRerultType(scope.row.result)">{{
                   resultList[scope.row.result] ? resultList[scope.row.result].name : ''
                 }}</el-button>
               </router-link>
-            </template></el-table-column
-          >
-          <el-table-column label="语言" min-width="80"
-            ><template slot-scope="scope"
-              ><span>{{ langList[scope.row.language].name }}</span></template
-            ></el-table-column
-          >
-          <el-table-column label="时间" min-width="80"
-            ><template slot-scope="scope"
-              ><span>{{ `${scope.row.time}ms` }}</span></template
-            ></el-table-column
-          >
-          <el-table-column label="内存" min-width="80"
-            ><template slot-scope="scope"
-              ><span>{{ `${scope.row.memory}KB` }}</span></template
-            ></el-table-column
-          >
-          <el-table-column label="代码长度" min-width="80"
-            ><template slot-scope="scope"
-              ><span>{{ calcCodeLength(scope.row.code_length) }}</span></template
-            ></el-table-column
-          >
-          <el-table-column label="评测时间" min-width="75"
-            ><template slot-scope="scope">
+            </template>
+          </el-table-column>
+          <el-table-column label="语言" min-width="80">
+            <template slot-scope="scope">
+              <span>{{ langList && langList[scope.row.language].name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="时间" min-width="80">
+            <template slot-scope="scope">
+              <span>{{ `${scope.row.time}ms` }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="内存" min-width="80">
+            <template slot-scope="scope">
+              <span>{{ `${scope.row.memory}KB` }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="代码长度" min-width="80">
+            <template slot-scope="scope">
+              <span>{{ calcCodeLength(scope.row.code_length) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="评测时间" min-width="75">
+            <template slot-scope="scope">
               <div style="word-break: break-word; white-space: pre-line">
                 {{ scope.row.judgetime }}
               </div>
-            </template></el-table-column
-          >
-          <el-table-column label="公开" min-width="60" v-if="!isContest"
-            ><template slot-scope="scope"
-              ><span>{{ scope.row.public == 1 ? '是' : '否' }}</span></template
-            ></el-table-column
-          >
+            </template>
+          </el-table-column>
+          <el-table-column label="公开" min-width="60" v-if="!isContest">
+            <template slot-scope="scope">
+              <span>{{ scope.row.public == 1 ? '是' : '否' }}</span>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -202,7 +203,6 @@ import {
   toRefs,
 } from '@vue/composition-api'
 import { useLangList, useMapState, usePagination, useQuery, useRoute, useRouter } from '@common/use'
-import { isEmpty } from 'lodash'
 import { getAlphabetNumber, getAbsoluteUrl } from '@common/utils'
 
 const searchableResultList = resultList.filter(val => val.code >= 4 && val.code <= 11)

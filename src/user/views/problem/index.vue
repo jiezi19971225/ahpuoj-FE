@@ -358,20 +358,18 @@ export default defineComponent({
         router.push({
           name: 'status',
           query: {
-            queryParam: problem.value.id.toString(),
+            param: problem.value.id.toString(),
           },
         })
       } else {
         const num = Number.parseInt(route.value.params.num, 10)
         router.push({
           name: 'contestStatus',
-          // TODO: 传参移动到 query 中
           params: {
             id: route.value.params.id.toString(),
-            // @ts-ignore
-            query: {
-              queryParam: getAlphabetNumber(num),
-            },
+          },
+          query: {
+            param: getAlphabetNumber(num).toString(),
           },
         })
       }
