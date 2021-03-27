@@ -9,7 +9,7 @@ pipeline {
         stage('build'){
             steps {
               echo 'fetch source code'
-              git 'https://github.com/jiezi19971225/ahpuoj-FE'
+              git 'https://gitee.com/jiezi19971225/ahpuoj-fe.git'
               echo 'start build image'
               script{
                 docker.withRegistry('https://ccr.ccs.tencentyun.com', 'dockerAccount') {
