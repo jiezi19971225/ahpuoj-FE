@@ -1,11 +1,13 @@
 const path = require('path')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const { ESBuildMinifyPlugin } = require('esbuild-loader')
 
 const productionGzipExtensions = /\.(js|css)(\?.*)?$/i
 
 module.exports = {
   lintOnSave: false,
   productionSourceMap: false,
+  transpileDependencies: ['vue-echarts', 'resize-detector'],
   chainWebpack: config => {
     const svgRule = config.module.rule('svg')
     // 清除已有的所有 loader。
@@ -77,6 +79,13 @@ module.exports = {
           minRatio: 0.8,
         })
       )
+      config.optimization.minimize = true
+      config.optimization.minimizer = [
+        new ESBuildMinifyPlugin({
+          target: 'es5',
+          exclude: [/node_modules/],
+        }),
+      ]
     }
     return {
       resolve: {
@@ -120,14 +129,6 @@ module.exports = {
         changOrigin: true,
         secure: false,
       },
-      // 图片显示的本地代理
-      // '^/upload': {
-      //   pathRewrite: { '^/upload': '/web/upload' },
-      //   target: 'http://172.16.0.3:8888',
-      //   ws: false,
-      //   changOrigin: true,
-      //   secure: false,
-      // },
     },
     // 启动一个本地静态服务器，以显示上传的图片资源，仅用于开发环境测试
     // eslint-disable-next-line global-require
