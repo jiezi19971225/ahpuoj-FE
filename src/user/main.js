@@ -20,9 +20,6 @@ Vue.use(VueCompositionApi)
 Vue.use(VueCodemirror)
 Vue.use(VueClipboard)
 
-// Vue.config.productionTip = false
-Vue.config.devtools = true
-
 // svg图标
 Vue.component('svg-icon', SvgIcon)
 const requireAll = requireContext => requireContext.keys().map(requireContext)

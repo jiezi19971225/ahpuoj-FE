@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig, Method } from 'axios'
-import { setupCache } from 'axios-cache-adapter'
 import Cookies from 'js-cookie'
 import { Message } from 'element-ui'
 import dayjs from 'dayjs'
@@ -7,13 +6,8 @@ import { isObject, merge } from 'lodash'
 import { unWrapObj } from '../utils/composition'
 
 const baseURL = '/api'
-const cache = setupCache({
-  maxAge: 0,
-})
 
-export const instance = axios.create({
-  adapter: cache.adapter,
-})
+export const instance = axios.create()
 const timeFields = ['created_at', 'updated_at', 'start_time', 'end_time']
 
 instance.interceptors.request.use(
