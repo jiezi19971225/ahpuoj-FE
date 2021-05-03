@@ -335,6 +335,21 @@ export default [
       },
     ],
   },
+  {
+    path: '/admin/updateLog',
+    component: layout,
+    children: [
+      {
+        path: '',
+        name: 'adminUpdateLog',
+        meta: {
+          icon: 'file-text',
+          title: '更新日志',
+        },
+        component: () => import('../views/updateLog'),
+      },
+    ],
+  },
   // 404路由
   {
     path: '/admin/*',

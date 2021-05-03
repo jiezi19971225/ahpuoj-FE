@@ -4,7 +4,7 @@
       <el-col :xs="24" :md="12">
         <el-card class="content__card__item">
           <h2 class="content__card__title">比赛用户账号生成器</h2>
-          <el-form :model="leftForm" :rules="leftRules" ref="leftForm" label-width="60px">
+          <el-form :model="leftForm" :rules="leftRules" ref="leftFormRef" label-width="60px">
             <el-form-item label="前缀" prop="prefix">
               <el-input v-model="leftForm.prefix"></el-input>
             </el-form-item>
@@ -25,7 +25,7 @@
             type="info"
             style="margin-bottom: 0.12rem"
           ></el-alert>
-          <el-form :model="rightForm" :rules="rightRules" ref="rightForm" label-width="70px">
+          <el-form :model="rightForm" :rules="rightRules" ref="rightFormRef" label-width="70px">
             <el-form-item label="用户名" prop="userList">
               <el-input
                 v-model="rightForm.userList"
@@ -41,124 +41,104 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-dialog
-      title="账号列表"
-      :visible.sync="dialogOperatorInfoVisible"
-      :close-on-click-modal="false"
-      width="800px"
-    >
-      <el-row>
-        <el-col class="infolist" el-col="el-col" :xs="24" :md="8">
-          <p class="dialog__info" v-for="(item, index) in info" :key="index">{{ item }}</p>
-        </el-col>
-        <el-col el-col="el-col" :xs="24" :md="16">
-          <el-table :data="tableData">
-            <el-table-column property="username" label="用户名" width="150"></el-table-column>
-            <el-table-column property="password" label="密码"></el-table-column>
-          </el-table>
-        </el-col>
-      </el-row>
-      <div class="dialog-footer" slot="footer">
-        <el-button type="primary" @click="dialogOperatorInfoVisible = false">确定</el-button>
-      </div>
-    </el-dialog>
+    <GeneratorInfoDialog ref="generatorInfoDialogRef" />
   </div>
 </template>
-<script>
+<script lang="ts">
 import * as generatorApi from '@admin/api/generatorts'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, reactive, ref } from '@vue/composition-api'
+import { ElForm } from 'element-ui/types/form.d'
+import GeneratorInfoDialog from './components/generator-info-dialog.vue'
 
 export default defineComponent({
   name: 'adminAccountGenerator',
-  data() {
-    return {
-      dialogOperatorInfoVisible: false,
-      info: '',
-      leftForm: {
-        prefix: '',
-        number: '',
-      },
-      leftRules: {
-        prefix: [
-          {
-            required: true,
-            message: '请输入前缀',
-            trigger: 'blur',
-          },
-        ],
-        number: [
-          {
-            required: true,
-            message: '请输入数量',
-            trigger: 'blur',
-          },
-          {
-            type: 'integer',
-            min: 0,
-            max: 100,
-            message: '请输入1-100之间的整数',
-            trigger: 'blur',
-          },
-        ],
-      },
-      rightForm: {
-        userList: '',
-      },
-      rightRules: {
-        userList: [
-          {
-            required: true,
-            message: '请输入用户名列表',
-            trigger: 'blur',
-          },
-        ],
-      },
-      tableData: [],
-    }
+  components: {
+    GeneratorInfoDialog,
   },
-  methods: {
-    submitCompeteAccount() {
-      this.info = ''
-      this.$refs.leftForm.validate(async valid => {
+  setup() {
+    const leftFormRef = ref<ElForm>()
+    const rightFormRef = ref<ElForm>()
+    const generatorInfoDialogRef = ref()
+
+    const leftForm = reactive({
+      prefix: '',
+      number: '',
+    })
+    const leftRules = {
+      prefix: [
+        {
+          required: true,
+          message: '请输入前缀',
+          trigger: 'blur',
+        },
+      ],
+      number: [
+        {
+          required: true,
+          message: '请输入数量',
+          trigger: 'blur',
+        },
+        {
+          type: 'integer',
+          min: 0,
+          max: 300,
+          message: '请输入1-300之间的整数',
+          trigger: 'blur',
+        },
+      ],
+    }
+    const rightForm = reactive({
+      userList: '',
+    })
+
+    const rightRules = {
+      userList: [
+        {
+          required: true,
+          message: '请输入用户名列表',
+          trigger: 'blur',
+        },
+      ],
+    }
+
+    const submitCompeteAccount = () => {
+      leftFormRef.value.validate(async valid => {
         if (valid) {
           try {
-            const res = await generatorApi.generateCompeteAccount(this.leftForm)
-            this.dialogOperatorInfoVisible = true
-            this.tableData = res.users
-            this.info = res.info
+            const res = await generatorApi.generateCompeteAccount<GenerateAccountResposne>(leftForm)
+            generatorInfoDialogRef.value.show(res.info, res.users)
           } catch (err) {
             console.log(err)
           }
-        } else {
-          return false
         }
       })
-    },
-    submitUserAccount() {
-      this.info = ''
-      this.$refs.rightForm.validate(async valid => {
+    }
+
+    const submitUserAccount = () => {
+      rightFormRef.value.validate(async valid => {
         if (valid) {
           try {
-            const res = await generatorApi.generateUserAccount(this.rightForm)
-            this.dialogOperatorInfoVisible = true
-            this.tableData = res.users
-            this.info = res.info
+            const res = await generatorApi.generateUserAccount<GenerateAccountResposne>(rightForm)
+            generatorInfoDialogRef.value.show(res.info, res.users)
           } catch (err) {
             console.log(err)
           }
-        } else {
-          return false
         }
       })
-    },
+    }
+
+    return {
+      leftFormRef,
+      rightFormRef,
+      generatorInfoDialogRef,
+      leftForm,
+      leftRules,
+      rightForm,
+      rightRules,
+
+      submitCompeteAccount,
+      submitUserAccount,
+    }
   },
 })
 </script>
-
-<style lang="scss" scoped>
-.dialog__info {
-  font-size: 16px;
-  text-align: left;
-  padding: 0.5em;
-}
-</style>

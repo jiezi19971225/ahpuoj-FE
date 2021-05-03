@@ -26,12 +26,20 @@
           :total="total"
         ></oj-paginator>
       </div>
-      <div style="margin-top: 0.2rem">
-        <span> 本项目基于 HUSTOJ 二次开发，项目地址 </span>
-        <a href="https://github.com/jiezi19971225/ahpuojDocker" target="_blank">
-          https://github.com/jiezi19971225/ahpuojDocker</a
-        >
-      </div>
+      <footer>
+        <a class="footer-item" href="https://github.com/jiezi19971225/ahpuojDocker" target="_blank">
+          <svg-icon name="github" class="footer-item-icon" />
+          <div>本项目基于 HUSTOJ 二次开发，点击查看项目</div>
+        </a>
+        <a class="footer-item" href="http://172.16.0.3:9999" target="_blank">
+          <svg-icon name="documentfull" class="footer-item-icon" />
+          <div>想要参与开发工作可以查看文档</div>
+        </a>
+        <router-link class="footer-item" :to="{ name: 'updateLog' }" target="_blank">
+          <svg-icon name="file-text" class="footer-item-icon" />
+          <div>查看系统更新日志</div>
+        </router-link>
+      </footer>
     </div>
   </div>
 </template>
@@ -118,5 +126,35 @@ export default defineComponent({
     bottom: 5px;
     right: 0.5rem;
   }
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  .footer-item {
+    width: 200px;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    color: #666;
+    &:hover {
+      cursor: pointer;
+      color: $--text-color-hover;
+    }
+    .footer-item-icon {
+      width: 40px;
+      flex-shrink: 0;
+    }
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff;
 }
 </style>

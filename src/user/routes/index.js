@@ -14,6 +14,14 @@ export default [
         component: () => import('../views/home'),
       },
       {
+        path: 'updateLog',
+        name: 'updateLog',
+        meta: {
+          title: '更新日志 - AHPUOJ',
+        },
+        component: () => import('../views/updateLog'),
+      },
+      {
         path: 'findpass',
         name: 'findpass',
         meta: {
