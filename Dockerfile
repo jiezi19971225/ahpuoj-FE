@@ -1,5 +1,5 @@
 # STEP 1: Build
-FROM node:12
+FROM node:14
 
 LABEL authors="jiezi19971225@gmail.com"
 
@@ -7,13 +7,13 @@ LABEL authors="jiezi19971225@gmail.com"
 
 COPY package.json /app/package.json
 
-RUN cd /app && npm install --registry=https://registry.npm.taobao.org
+RUN cd /app && yarn
 
 COPY ./ /app
 
 WORKDIR /app
 
-RUN npm run build
+RUN yarn build
 
 # STEP 2: Setup
 FROM nginx:latest
