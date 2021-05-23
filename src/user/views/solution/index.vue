@@ -159,7 +159,7 @@ import * as userApi from '@user/api/userts'
 import EventBus from 'common/eventbus'
 
 import { resultList, langList } from '@common/const'
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, onUnmounted, ref } from '@vue/composition-api'
 import { useLoading, useRoute } from '@common/use'
 import { handleDownloadFile, getAbsoluteUrl, getAlphabetNumber } from '@common/utils'
 
@@ -251,6 +251,11 @@ export default defineComponent({
       if (timer) {
         clearInterval(timer)
       }
+    })
+
+    onUnmounted(() => {
+      clearInterval(timer)
+      loading.close()
     })
 
     const handleToggleSolutionStatus = () => {
