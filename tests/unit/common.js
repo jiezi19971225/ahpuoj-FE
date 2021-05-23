@@ -1,9 +1,9 @@
-import { instance } from '../../src/common/axios/request'
+import { instance } from '@common/axios/request'
 
 instance.defaults.baseURL = 'http://127.0.0.1:8080/api/'
 instance.defaults.adapter = require('axios/lib/adapters/http')
 
-const adminToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjIxMDk0MDYxfQ.cLpHKWq2HkJg7N9zc4FOiMTu-DWCL35YHTmvoBM7TfA`
+const adminToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjI4OTQ2ODQ4fQ.ZPIPlouCbGeMYvlZqUkAPopAFQQM1C0DkIKoWfxpegY`
 instance.defaults.headers.Authorization = adminToken
 
 const generateRandomString = length => {

@@ -1,4 +1,4 @@
-import { get, post, put, del } from '../../common/axios/request'
+import { get, post, put, del } from '@common/axios/request'
 
 /** 新建新闻 */
 export const createNew = post('/admin/new')

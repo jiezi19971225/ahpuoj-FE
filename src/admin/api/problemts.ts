@@ -1,4 +1,4 @@
-import { get, post, put, del } from '../../common/axios/request'
+import { get, post, put, del } from '@common/axios/request'
 
 /** 新建问题 */
 export const createProblem = post(`/admin/problem`)

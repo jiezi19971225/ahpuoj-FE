@@ -9,4 +9,9 @@ module.exports = {
   },
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'js', 'ts', 'tsx'],
   testTimeout: 10000,
+  moduleNameMapper: {
+    '^@common/(.*)$': '<rootDir>/src/common/$1',
+    '^@user/(.*)$': '<rootDir>/src/user/$1',
+    '^@admin/(.*)$': '<rootDir>/src/admin/$1',
+  },
 }

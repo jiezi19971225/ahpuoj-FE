@@ -1,5 +1,5 @@
 import { ref } from '@vue/composition-api'
-import * as nologinApi from 'common/api/nologin'
+import * as nologinApi from '@common/api/nologin'
 
 export const useLangList = () => {
   const langList = ref<LangListItem[]>([])
