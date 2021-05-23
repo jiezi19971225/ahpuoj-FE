@@ -1,4 +1,4 @@
-import { get, post, put, del } from '../../common/axios/request'
+import { get, post, put, del } from '@common/axios/request'
 
 /** 创建标签 */
 export const createTag = post(`admin/tag`)

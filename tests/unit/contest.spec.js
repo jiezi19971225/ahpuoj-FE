@@ -6,7 +6,7 @@ import * as userApi from '../../src/user/api/userts'
 import * as contestApi from '../../src/admin/api/contestts'
 import * as problemApi from '../../src/admin/api/problemts'
 
-describe('news crud', () => {
+describe('contest crud', () => {
   let testUsername
   let testPassword
   let testUserToken
@@ -87,6 +87,7 @@ describe('news crud', () => {
         done()
       })
       .catch(err => {
+        console.log(err)
         done(err)
       })
   })

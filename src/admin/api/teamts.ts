@@ -1,4 +1,4 @@
-import { get, post, put, del } from '../../common/axios/request'
+import { get, post, put, del } from '@common/axios/request'
 
 /** 创建团队 */
 export const createTeam = post('/admin/team')
